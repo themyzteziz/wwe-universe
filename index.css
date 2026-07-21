@@ -1,0 +1,327 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #111;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  padding: 24px;
+  text-align: center;
+  background: #1b1b1b;
+  border-bottom: 3px solid #d71920;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.header p {
+  margin: 6px 0 0;
+  color: #aaa;
+}
+
+.week-info {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #1b1b1b;
+  border: 2px solid #d71920;
+  border-radius: 10px;
+}
+
+.week-info h2 {
+  margin-top: 0;
+}
+
+.week-info p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.week-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.week-controls button {
+  background: #d71920;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.week-controls button:hover {
+  background: #ff2d35;
+}
+
+.week-controls h3 {
+  margin: 0;
+}
+
+main {
+  padding: 0 20px 40px;
+}
+
+.roster-section {
+  max-width: 900px;
+  margin: 30px auto;
+}
+
+.roster-section h2 {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1b1b1b;
+}
+
+.roster-table th,
+.roster-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.roster-table th {
+  background: #d71920;
+  color: white;
+}
+
+.roster-table tbody tr:hover {
+  background: #252525;
+}
+
+.roster-table td:nth-child(2),
+.roster-table th:nth-child(2) {
+  text-align: center;
+  width: 100px;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.status.world {
+  background: #5d4300;
+  color: #ffd95a;
+}
+
+.status.singles {
+  background: #123d22;
+  color: #7cff9c;
+}
+
+.status.available {
+  background: #333;
+  color: #ddd;
+}
+
+.status.used {
+  background: #4a1515;
+  color: #ff7b7b;
+}
+
+.status.available {
+  background: #123d22;
+  color: #7cff9c;
+}
+
+.status-button {
+  background: #2d2d2d;
+  color: white;
+  border: 1px solid #555;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.status-button:hover {
+  background: #444;
+}
+
+.wins-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.wins-number {
+  min-width: 28px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.win-button {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.win-button:hover:not(:disabled) {
+  transform: scale(1.08);
+}
+
+.win-button.plus {
+  background: #198754;
+  color: white;
+}
+
+.win-button.minus {
+  background: #b02a37;
+  color: white;
+}
+
+.win-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.wrestler-name {
+  font-weight: 800;
+}
+
+.champion-crown {
+  margin-right: 8px;
+}
+
+.champion-row {
+  background: rgba(255, 215, 0, 0.16);
+}
+
+.champion-row:hover {
+  background: rgba(255, 215, 0, 0.24);
+}
+
+.champion-button {
+  border: 1px solid #d4af37;
+  border-radius: 7px;
+  padding: 8px 12px;
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.champion-button:hover {
+  transform: scale(1.03);
+  background: rgba(255, 215, 0, 0.15);
+}
+
+.champion-button.active {
+  background: #d4af37;
+  color: #111;
+}
+
+.match-generator {
+  width: min(100% - 2rem, 700px);
+  margin: 24px auto;
+  padding: 20px;
+  background: #1b1b1b;
+  border: 2px solid #e31b23;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.match-generator h2 {
+  margin-top: 0;
+}
+
+.generate-match-button {
+  margin-top: 10px;
+  padding: 10px 18px;
+  background: #e31b23;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.generate-match-button:hover {
+  background: #b9151b;
+}
+
+.generated-match {
+  margin-top: 18px;
+  padding: 16px;
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.generated-match h3 {
+  margin-top: 0;
+  color: #fff;
+}
+
+.generated-match-type {
+  color: #aaa;
+  font-weight: bold;
+}
+
+.generated-participants {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.generated-wrestler {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.versus {
+  color: #e31b23;
+  margin-left: 10px;
+}
+
+.match-reason {
+  color: #bbb;
+  margin-bottom: 0;
+}
+
+.generator-error {
+  margin-top: 14px;
+  color: #ff6b6b;
+  font-weight: bold;
+}

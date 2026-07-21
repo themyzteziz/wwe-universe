@@ -149,6 +149,11 @@ main {
   color: #7cff9c;
 }
 
+.status.title-shot {
+  background-color: #ffc107;
+  color: #000;
+}
+
 .status-button {
   background: #2d2d2d;
   color: white;

@@ -2,21 +2,30 @@ export default function RosterTable({
   wrestlers,
   setWrestlers,
 }) {
-  function toggleStatus(name) {
-    setWrestlers((currentWrestlers) =>
-      currentWrestlers.map((wrestler) =>
-        wrestler.name === name
-          ? {
-              ...wrestler,
-              status:
-                wrestler.status === "available"
-                  ? "used"
-                  : "available",
-            }
-          : wrestler
-      )
-    );
-  }
+ function toggleStatus(name) {
+  setWrestlers((currentWrestlers) =>
+    currentWrestlers.map((wrestler) => {
+      if (wrestler.name !== name) {
+        return wrestler;
+      }
+
+      let newStatus;
+
+      if (wrestler.status === "available") {
+        newStatus = "title-shot";
+      } else if (wrestler.status === "title-shot") {
+        newStatus = "used";
+      } else {
+        newStatus = "available";
+      }
+
+      return {
+        ...wrestler,
+        status: newStatus,
+      };
+    })
+  );
+}
 
   function changeWins(name, amount) {
     setWrestlers((currentWrestlers) =>
@@ -113,18 +122,22 @@ export default function RosterTable({
                 </td>
 
                 <td>
-                  <span
-                    className={`status ${
-                      wrestler.status === "used"
-                        ? "used"
-                        : "available"
-                    }`}
-                  >
-                    {wrestler.status === "used"
-                      ? "Title Shot Used"
-                      : "Available"}
-                  </span>
-                </td>
+                 <span
+    className={`status ${
+      wrestler.status === "used"
+        ? "used"
+        : wrestler.status === "title-shot"
+        ? "title-shot"
+        : "available"
+    }`}
+  >
+    {wrestler.status === "used"
+      ? "Title Shot Used"
+      : wrestler.status === "title-shot"
+      ? "Title Shot"
+      : "Available"}
+  </span>
+</td>
 
                 <td>
                   <button

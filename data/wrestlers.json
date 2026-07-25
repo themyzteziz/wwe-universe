@@ -7,7 +7,7 @@
   { "name": "DARBY ALLIN", "wins": 13, "note": "*" },
   { "name": "DOLPH", "wins": 11, "note": "" },
   { "name": "EDGE", "wins": 7, "note": "" },
-  { "name": "JEFF HARDY", "wins": 7, "note": "WILL RETURN" },
+  { "name": "JEFF HARDY", "wins": 7, "note": "" },
   { "name": "JOHNNY TV", "wins": 6, "note": "*" },
   { "name": "KENNY", "wins": 11, "note": "" },
   { "name": "MISTICO", "wins": 17, "note": "" },
@@ -22,5 +22,6 @@
   { "name": "VIKINGO", "wins": 7, "note": "" },
   { "name": "WILL OSPREAY", "wins": 9, "note": "*" },
   { "name": "BANDIDO", "wins": 2, "note": "*" },
-  { "name": "SETH ROLLINS", "wins": 0,  "note": ""}
+  { "name": "SETH ROLLINS", "wins": 0,  "note": ""},
+  { "name": "MATT HARDY", "wins": 0,  "note": ""}
 ]

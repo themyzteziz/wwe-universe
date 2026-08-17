@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import WeekInfo from "./components/WeekInfo";
-import MatchGenerator from "./components/MatchGenerator.jsx";
+import MatchGenerator from "./components/MatchGenerator";
 import RosterTable from "./components/RosterTable";
-import wrestlersData from "./data/wrestlers.json";
-import { useEffect, useState } from "react";
 import WrestlersManager from "./components/WrestlersManager";
+import wrestlersData from "./data/wrestlers.json";
 
 function createInitialRoster() {
   return wrestlersData.map((wrestler) => ({

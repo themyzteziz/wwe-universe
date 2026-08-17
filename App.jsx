@@ -4,6 +4,8 @@ import WeekInfo from "./components/WeekInfo";
 import MatchGenerator from "./components/MatchGenerator.jsx";
 import RosterTable from "./components/RosterTable";
 import wrestlersData from "./data/wrestlers.json";
+import { useEffect, useState } from "react";
+import WrestlersManager from "./components/WrestlersManager";
 
 function createInitialRoster() {
   return wrestlersData.map((wrestler) => ({
@@ -41,6 +43,7 @@ function loadCurrentWeek() {
 export default function App() {
   const [currentWeek, setCurrentWeek] = useState(loadCurrentWeek);
   const [wrestlers, setWrestlers] = useState(loadRoster);
+  const [page, setPage] = useState("booking");
 
   useEffect(() => {
     localStorage.setItem("currentWeek", currentWeek);
@@ -50,24 +53,49 @@ export default function App() {
     localStorage.setItem("wrestlers", JSON.stringify(wrestlers));
   }, [wrestlers]);
 
-  return (
-    <>
-      <Header />
+return (
+  <>
+    <Header />
 
-      <WeekInfo
-        currentWeek={currentWeek}
-        setCurrentWeek={setCurrentWeek}
-      />
+    <nav className="main-nav">
+      <button
+        className={page === "booking" ? "active" : ""}
+        onClick={() => setPage("booking")}
+      >
+        BOOKING
+      </button>
 
-      <MatchGenerator
-        currentWeek={currentWeek}
-        wrestlers={wrestlers}
-      />
+      <button
+        className={page === "wrestlers" ? "active" : ""}
+        onClick={() => setPage("wrestlers")}
+      >
+        WRESTLERS
+      </button>
+    </nav>
 
-      <RosterTable
+    {page === "booking" ? (
+      <>
+        <WeekInfo
+          currentWeek={currentWeek}
+          setCurrentWeek={setCurrentWeek}
+        />
+
+        <MatchGenerator
+          currentWeek={currentWeek}
+          wrestlers={wrestlers}
+        />
+
+        <RosterTable
+          wrestlers={wrestlers}
+          setWrestlers={setWrestlers}
+        />
+      </>
+    ) : (
+      <WrestlersManager
         wrestlers={wrestlers}
         setWrestlers={setWrestlers}
       />
-    </>
-  );
+    )}
+  </>
+);
 }

@@ -40,172 +40,37 @@ export default function MatchGenerator({
   function generateMatch() {
     const eligibleWrestlers = wrestlers.filter(
       (wrestler) =>
-        wrestler.status === "available" &&
-        wrestler.note !== "WILL RETURN" &&
+        (wrestler.status === "available" ||
+          wrestler.status === "used") &&
         !wrestler.champion
     );
 
-    const champions = wrestlers.filter(
-      (wrestler) =>
-        wrestler.champion &&
-        wrestler.note !== "WILL RETURN"
-    );
-
-    if (currentMatchType === "1v1") {
-      generateOneVsOne(eligibleWrestlers, champions);
-      return;
-    }
+    let amount = 2;
 
     if (currentMatchType === "3MAN ELI") {
-      generateThreeMan(eligibleWrestlers, champions);
-      return;
+      amount = 3;
     }
 
-    generateFourMan(eligibleWrestlers);
-  }
-
-  function generateOneVsOne(
-    eligibleWrestlers,
-    champions
-  ) {
-    const worldTitleCandidates = eligibleWrestlers
-      .filter(
-        (wrestler) =>
-          wrestler.wins > 0 &&
-          wrestler.wins % 3 === 0
-      )
-      .sort((a, b) => b.wins - a.wins);
-
-    if (
-      worldTitleCandidates.length > 0 &&
-      champions.length > 0
-    ) {
-      const challenger = worldTitleCandidates[0];
-      const champion =
-        champions[
-          Math.floor(Math.random() * champions.length)
-        ];
-
-      setGeneratedMatch({
-        title: "World Title Match",
-        type: "1v1",
-        participants: [challenger, champion],
-        reason: `${challenger.name} earned a World Title Shot with ${challenger.wins} wins.`,
-      });
-
-      return;
+    if (currentMatchType === "4MAN ELI") {
+      amount = 4;
     }
 
     const participants = getRandomWrestlers(
       eligibleWrestlers,
-      2
+      amount
     );
 
-    if (participants.length < 2) {
+    if (participants.length < amount) {
       setGeneratedMatch({
-        error:
-          "Not enough available wrestlers to generate a 1v1 match.",
+        error: `Not enough wrestlers to generate a ${currentMatchType} match.`,
       });
+
       return;
     }
 
     setGeneratedMatch({
       title: "Normal Match",
-      type: "1v1",
-      participants,
-    });
-  }
-
-  function generateThreeMan(
-    eligibleWrestlers,
-    champions
-  ) {
-    const singlesTitleCandidates = eligibleWrestlers
-      .filter(
-        (wrestler) =>
-          wrestler.wins > 0 &&
-          wrestler.wins % 2 === 0
-      )
-      .sort((a, b) => b.wins - a.wins);
-
-    if (
-      singlesTitleCandidates.length > 0 &&
-      champions.length > 0
-    ) {
-      const challenger = singlesTitleCandidates[0];
-      const champion =
-        champions[
-          Math.floor(Math.random() * champions.length)
-        ];
-
-      const remainingWrestlers =
-        eligibleWrestlers.filter(
-          (wrestler) =>
-            wrestler.name !== challenger.name
-        );
-
-      const extraParticipant =
-        getRandomWrestlers(remainingWrestlers, 1)[0];
-
-      if (!extraParticipant) {
-        setGeneratedMatch({
-          error:
-            "Not enough available wrestlers to generate a 3-man title match.",
-        });
-        return;
-      }
-
-      setGeneratedMatch({
-        title: "Singles Title Match",
-        type: "3MAN ELI",
-        participants: [
-          challenger,
-          champion,
-          extraParticipant,
-        ],
-        reason: `${challenger.name} earned a Singles Title Shot with ${challenger.wins} wins.`,
-      });
-
-      return;
-    }
-
-    const participants = getRandomWrestlers(
-      eligibleWrestlers,
-      3
-    );
-
-    if (participants.length < 3) {
-      setGeneratedMatch({
-        error:
-          "Not enough available wrestlers to generate a 3-man elimination match.",
-      });
-      return;
-    }
-
-    setGeneratedMatch({
-      title: "Normal Match",
-      type: "3MAN ELI",
-      participants,
-    });
-  }
-
-  function generateFourMan(eligibleWrestlers) {
-    const participants = getRandomWrestlers(
-      eligibleWrestlers,
-      4
-    );
-
-    if (participants.length < 4) {
-      setGeneratedMatch({
-        error:
-          "Not enough available wrestlers to generate a 4-man elimination match.",
-      });
-      return;
-    }
-
-    setGeneratedMatch({
-      title: "Normal Match",
-      type: "4MAN ELI",
+      type: currentMatchType,
       participants,
     });
   }
@@ -250,10 +115,6 @@ export default function MatchGenerator({
                     className="generated-wrestler"
                     key={wrestler.name}
                   >
-                    {wrestler.champion && (
-                      <span>👑 </span>
-                    )}
-
                     {wrestler.name}
 
                     {index <
@@ -268,12 +129,6 @@ export default function MatchGenerator({
                 )
               )}
             </div>
-
-            {generatedMatch.reason && (
-              <p className="match-reason">
-                {generatedMatch.reason}
-              </p>
-            )}
           </div>
         )}
     </section>

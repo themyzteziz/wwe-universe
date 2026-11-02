@@ -29,3 +29,7 @@ The existing application, extended with `Booking`, `Product`, `Document`, `Proje
 
 ### FT-124 Out of scope for initial version
 - **US-125** These can be explored later, but never block the first working simulation — development
+
+### FT-127 Open design decisions for the team
+- **US-128** Relationships evolve naturally based on match results — development
+- **US-129** **Goal:** Create a living WWE Universe where anything happen,s wrestlers develop — development

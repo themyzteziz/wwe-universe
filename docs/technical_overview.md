@@ -35,3 +35,26 @@ Rules:
 - Each event proposal stores its seed so it can be replayed.
 
 Tooling: Vitest is the test runner (`npm run test`). Lint config is `eslint.config.mjs` (flat config, `@eslint/js`, `react-hooks`, `react-refresh`).
+
+## Simulation engine: event type catalogue
+
+Module: `universe/sim/config.js` (US-123). Tests: `universe/sim/config.test.js`.
+
+| Export | Value / purpose |
+|---|---|
+| `TIERS` | `common` weight 70, `uncommon` 25, `rare` 5 |
+| `EVENT_TYPES` | 8 types keyed by id: `confrontation`, `respect`, `interference`, `save`, `ambush`, `betrayal`, `faction`, `return` |
+| `HISTORY_WINDOW_WEEKS` | 4 (US-125) |
+| `SUGGESTION_MIN_STORYLINE_EVENTS` | 2 (US-126) |
+| `CHAOS_DELTA_JITTER` | used by relationship deltas (US-126) |
+| `validateConfig(types, tiers)` | returns error strings; empty array = valid |
+
+Fields per event type: `id, label, tier, minParticipants, maxParticipants, cooldownWeeks, pairCooldownWeeks, roles, relationRule, deltas, requiresInactiveWrestler?`.
+
+- `roles` maps to `participantIds` positions (`a` = index 0).
+- `relationRule` is a string id. Rule logic is implemented in US-124. Values: `none`, `notEnemies`, `helperNotHostile`, `saviourAlly`, `hostileOrChaos`, `priorAlly`, `factionFormable`.
+- `deltas` are added in US-126.
+- Cooldowns: common 2 weeks, uncommon 4, rare 8; pair cooldown is twice the type cooldown (tunable).
+- `return` sets `requiresInactiveWrestler: true` and is skipped unless a wrestler has `status === 'inactive'`.
+
+Defaults and constants: `DEFAULT_SETTINGS` is owned only by `universe/constants.js` (US-113). `sim/config.js` imports from it and does not re-export it. Import direction: `constants.js` ← `sim/config.js`; `schema.js` never imports `sim/*`.

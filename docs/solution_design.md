@@ -103,3 +103,24 @@ None required. Optional AI description hook only (template text default; no back
 | Acceptance tests in RTL/Vitest, headless loop via reducer | No Playwright (out of scope) | Browser tests |
 
 **Risks:** engine signatures from FT-109 not final (Med/Med) → `proposals.js` is the only adapter; cooldown constant name to align; two proposals via double click/StrictMode (Low/Med) → reducer guard via `canPropose`.
+
+## FT-111 — UNIVERSE view and settings (US-131, US-132, US-133)
+
+**Modules**
+| Path | Role | Story |
+|---|---|---|
+| `components/universe/UniverseView.jsx` | Sub-tab shell (Timeline, Relationships, Settings, Backup); local sub-tab state; pending-proposal badge on the UNIVERSE tab in `App.jsx` | US-131 |
+| `components/universe/Timeline.jsx` + `universe/selectors.js` (`timelineEntries`) | Read-only chronological list, filters, 50/page | US-132 |
+| `components/universe/SettingsPanel.jsx`, `DEFAULT_SETTINGS` + `validateSettings` in `schema.js`, reducer `UPDATE_SETTINGS`/`RESET_SETTINGS` | Settings editing and reset | US-133 |
+
+**Data model:** no schema change; settings live in `state.settings` (`seed` is integer|null). `schemaVersion` unchanged.
+
+**Key decisions**
+- Sub-tab selection is local UI state, not persisted · reason: no value, keeps the schema stable · alternative: store in settings.
+- Timeline is a pure selector over existing arrays (no derived/stored timeline) · reason: single source of truth, 500 entries is trivial with paging · alternative: stored feed.
+- Proposed events are excluded from the timeline; they appear in the proposal UI (FT-110).
+- Settings validated both in the UI and in the reducer (`validateSettings`), since import can supply bad data.
+
+**Risks**
+- Frequency 0 must be honoured by the engine/trigger (FT-109/110) — covered by a trigger-level test (low likelihood, medium impact).
+- Relationships/Backup sub-tabs depend on other stories; shell uses placeholders until available (low).

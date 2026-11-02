@@ -111,3 +111,15 @@ You can M3 - Events: the player to generate, accept/reject and review non-repeti
 
 - AC 1: M3 - Events: the player generate,s accept/reject
 - AC 2: Invalid input is rejected
+
+## These can be explored later, but never block the first working simulation
+You can these can be explored later, but to never block the first working simulation, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: These can be explored later
+- AC 2: Negative path
+- AC 3: Invalid input is rejected

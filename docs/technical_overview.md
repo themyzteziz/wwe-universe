@@ -39,3 +39,7 @@
 ## US-122 M3 - Events: the player generate,s accept/reject
 - `src/bookings/m3-events-player.service.ts`
 - `test/bookings/m3-events-player.test.ts`
+
+## US-125 These can be explored later, but never block the first working simulation
+- `src/bookings/these-can-be.service.ts`
+- `test/bookings/these-can-be.test.ts`

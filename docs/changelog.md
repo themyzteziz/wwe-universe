@@ -2,7 +2,8 @@
 
 ## Changelog
 
-- 2026-11-02 — US-115 Universe persistence layer and React state provider: universe is saved automatically (300 ms debounce) and reloaded after refresh; BOOKING and WRESTLERS now use a shared store; storage and read-only warnings shown as banners.
+- 2026-11-02 — US-117 Record structured match results from booking win controls: Winner buttons store a MatchResult in the Universe store (persisted under `wwe-universe-v2`), and "Undo last result" reverts the last win.
+- 2026-11-02 — US-118 Relationship model: scale, states and explainable history (see previous entry).
 
 ## 2026-11-02 — US-118 Relationship model: scale, states and explainable history
 

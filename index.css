@@ -7,6 +7,7 @@ body {
   background: #111;
   color: white;
   font-family: Arial, sans-serif;
+  overflow-wrap: break-word;
 }
 
 .header {
@@ -40,19 +41,84 @@ body {
   color: #ddd;
 }
 
+.banner span {
+  min-width: 0;
+}
+
 .banner.warning {
   border-color: #ffc107;
   background: #3a2f00;
   color: #ffd95a;
 }
 
+.banner.error {
+  border-color: #e31b23;
+  background: #3a0f12;
+  color: #ff7b7b;
+}
+
 .banner button {
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
   background: transparent;
   border: none;
   color: inherit;
   font-size: 20px;
   line-height: 1;
   cursor: pointer;
+}
+
+.error-fallback {
+  width: min(100% - 2rem, 600px);
+  margin: 48px auto;
+  padding: 24px;
+  background: #1b1b1b;
+  border: 2px solid #e31b23;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.error-fallback h1 {
+  margin-top: 0;
+}
+
+.error-fallback p {
+  color: #ccc;
+}
+
+.error-fallback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.error-fallback-actions button {
+  min-height: 40px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #e31b23;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.error-fallback-actions button:hover:not(:disabled) {
+  background: #b9151b;
+}
+
+.error-fallback-actions button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.error-fallback p.error-fallback-note {
+  margin-bottom: 0;
+  color: #ff7b7b;
+  font-weight: bold;
 }
 
 .week-info {
@@ -758,8 +824,98 @@ main {
   color: #bbb;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
+  .header {
+    padding: 16px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+
+  .main-nav {
+    gap: 8px;
+  }
+
+  .main-nav button,
+  .universe-subtabs button {
+    flex: 1 1 auto;
+    min-height: 40px;
+    padding: 8px 12px;
+  }
+
+  main {
+    padding: 0 12px 40px;
+  }
+
+  .week-info {
+    width: min(100% - 2rem, 600px);
+    padding: 16px;
+  }
+
+  .week-controls {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .match-generator,
+  .universe-panel {
+    padding: 14px;
+  }
+
+  .roster-section {
+    width: min(100% - 2rem, 900px);
+  }
+
+  .roster-table th,
+  .roster-table td {
+    padding: 10px 8px;
+  }
+
+  .add-wrestler-form {
+    flex-wrap: wrap;
+  }
+
+  .add-wrestler-form input {
+    min-width: 0;
+  }
+
+  .wrestler-manager-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
   .profile-row-button {
     flex-wrap: wrap;
+  }
+
+  .profile-history {
+    padding-left: 18px;
+  }
+
+  .timeline-filters > *,
+  .timeline-filters select,
+  .timeline-pager {
+    min-width: 0;
+  }
+
+  .timeline-pager {
+    flex-wrap: wrap;
+  }
+
+  .timeline-entry,
+  .relationship-profile,
+  .universe-panel {
+    overflow-wrap: anywhere;
+  }
+
+  .universe-panel table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .error-fallback {
+    padding: 16px;
   }
 }

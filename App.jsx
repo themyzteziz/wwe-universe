@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Header from "./components/Header";
+import Banner from "./components/Banner";
 import WeekInfo from "./components/WeekInfo";
 import MatchGenerator from "./components/MatchGenerator";
 import RosterTable from "./components/RosterTable";
@@ -29,21 +30,13 @@ export default function App() {
       <Header />
 
       {banners.map((banner) => (
-        <div
+        <Banner
           key={banner.id}
-          className={`banner ${banner.kind}`}
-          role={banner.kind === "warning" ? "alert" : "status"}
+          kind={banner.kind}
+          onDismiss={() => dismissBanner(banner.id)}
         >
-          <span>{banner.text}</span>
-
-          <button
-            type="button"
-            aria-label="Dismiss message"
-            onClick={() => dismissBanner(banner.id)}
-          >
-            ×
-          </button>
-        </div>
+          {banner.text}
+        </Banner>
       ))}
 
       <nav className="main-nav">

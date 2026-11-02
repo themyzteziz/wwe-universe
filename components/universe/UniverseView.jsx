@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SettingsPanel from "./SettingsPanel.jsx";
 import Timeline from "./Timeline.jsx";
 
 export const SUB_TABS = ["Timeline", "Relationships", "Settings", "Backup"];
@@ -33,6 +34,8 @@ export default function UniverseView() {
       >
         {subTab === "Timeline" ? (
           <Timeline />
+        ) : subTab === "Settings" ? (
+          <SettingsPanel />
         ) : (
           <p className="universe-placeholder">{subTab} is coming soon.</p>
         )}

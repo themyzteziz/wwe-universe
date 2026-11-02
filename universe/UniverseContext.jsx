@@ -7,7 +7,7 @@ import {
   useReducer,
   useRef,
 } from "react";
-import { validateSettings } from "./constants";
+import { DEFAULT_SETTINGS, validateSettings } from "./constants";
 import { recordResult, undoLastResult } from "./matchResults";
 import { ensureCurrent } from "./migrate";
 import { applyDelta, RelationshipError } from "./relationships";
@@ -174,6 +174,19 @@ function applyAction(universe, action) {
 
     case "undoLastResult":
       return undoLastResult(universe);
+
+    // `settings` is a partial payload; invalid values leave the state unchanged.
+    case "updateSettings": {
+      const merged = { ...universe.settings, ...action.settings };
+
+      return validateSettings(merged).ok
+        ? { ...universe, settings: merged }
+        : universe;
+    }
+
+    // Also clears the AI fields (aiEnabled false, aiEndpoint "").
+    case "resetSettings":
+      return { ...universe, settings: { ...DEFAULT_SETTINGS } };
 
     default:
       return universe;

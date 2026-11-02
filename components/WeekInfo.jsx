@@ -2,7 +2,7 @@ const weekTypes = ["1v1", "3MAN ELI", "4MAN ELI"];
 
 export default function WeekInfo({
   currentWeek,
-  setCurrentWeek,
+  dispatch,
 }) {
   const currentMatchType =
     weekTypes[(currentWeek - 1) % weekTypes.length];
@@ -11,11 +11,11 @@ export default function WeekInfo({
     weekTypes[currentWeek % weekTypes.length];
 
   function previousWeek() {
-    setCurrentWeek((week) => Math.max(1, week - 1));
+    dispatch({ type: "setWeek", week: Math.max(1, currentWeek - 1) });
   }
 
   function nextWeek() {
-    setCurrentWeek((week) => week + 1);
+    dispatch({ type: "setWeek", week: currentWeek + 1 });
   }
 
   return (

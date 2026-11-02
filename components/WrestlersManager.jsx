@@ -1,8 +1,9 @@
 import { useState } from "react";
+import { newId } from "../universe/schema";
 
 export default function WrestlersManager({
   wrestlers,
-  setWrestlers,
+  dispatch,
 }) {
   const [newName, setNewName] = useState("");
 
@@ -22,40 +23,19 @@ export default function WrestlersManager({
       return;
     }
 
-    setWrestlers((current) => [
-      ...current,
-      {
-        name,
-        wins: 0,
-        note: "",
-        status: "available",
-        champion: false,
-      },
-    ]);
+    dispatch({ type: "addWrestler", name, id: newId("w") });
 
     setNewName("");
   }
 
-  function removeWrestler(name) {
+  function removeWrestler(wrestler) {
     const confirmed = window.confirm(
-      `Remove ${name} from the roster?`
+      `Remove ${wrestler.name} from the roster?`
     );
 
     if (!confirmed) return;
 
-    setWrestlers((current) =>
-      current.filter((wrestler) => wrestler.name !== name)
-    );
-  }
-
-  function changeNote(name, note) {
-    setWrestlers((current) =>
-      current.map((wrestler) =>
-        wrestler.name === name
-          ? { ...wrestler, note }
-          : wrestler
-      )
-    );
+    dispatch({ type: "removeWrestler", id: wrestler.id });
   }
 
   const sortedWrestlers = [...wrestlers].sort((a, b) =>
@@ -88,7 +68,7 @@ export default function WrestlersManager({
         {sortedWrestlers.map((wrestler) => (
           <div
             className="wrestler-manager-card"
-            key={wrestler.name}
+            key={wrestler.id}
           >
             <div className="wrestler-manager-header">
               <strong>{wrestler.name}</strong>
@@ -96,7 +76,7 @@ export default function WrestlersManager({
               <button
                 className="remove-wrestler-button"
                 onClick={() =>
-                  removeWrestler(wrestler.name)
+                  removeWrestler(wrestler)
                 }
               >
                 Remove
@@ -108,12 +88,13 @@ export default function WrestlersManager({
               <input
                 type="text"
                 placeholder="Add a note..."
-                value={wrestler.note || ""}
+                value={wrestler.notes || ""}
                 onChange={(event) =>
-                  changeNote(
-                    wrestler.name,
-                    event.target.value
-                  )
+                  dispatch({
+                    type: "setNotes",
+                    id: wrestler.id,
+                    notes: event.target.value,
+                  })
                 }
               />
             </label>

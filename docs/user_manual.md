@@ -78,3 +78,14 @@ You can keep the app functional without paid AI APIs; AI text generation to be o
 
 - AC 1: Keep the app functional without paid AI APIs
 - AC 2: Invalid input is rejected
+
+## Avoid embedding API secrets in browser bundles or localStorage
+You can avoid embedding API secrets in browser bundles or localStorage. If hosted AI calls are required, propose a separate secure backend, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: Avoid embedding API secrets in browser bundles
+- AC 2: Invalid input is rejected

@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-11-02 — US-121 M2 - Relationships: relationship changes are viewed
+- 2026-11-02 — US-118 Avoid embedding API secrets in browser bundles or localStorage
 - 2026-11-02 — US-117 Keep the app functional without paid AI APIs
 - 2026-11-02 — US-114 Stable wrestler IDs are independent of wrestler names to support renames
 - 2026-11-02 — US-111 Events are influenced by wrestler history

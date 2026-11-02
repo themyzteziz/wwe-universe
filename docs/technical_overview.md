@@ -31,3 +31,7 @@
 ## US-118 Avoid embedding API secrets in browser bundles or localStorage
 - `src/bookings/avoid-embedding-api.service.ts`
 - `test/bookings/avoid-embedding-api.test.ts`
+
+## US-121 M2 - Relationships: relationship changes are viewed
+- `src/bookings/m2-relationships-relationship.service.ts`
+- `test/bookings/m2-relationships-relationship.test.ts`

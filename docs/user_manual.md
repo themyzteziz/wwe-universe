@@ -89,3 +89,14 @@ You can avoid embedding API secrets in browser bundles or localStorage. If hoste
 
 - AC 1: Avoid embedding API secrets in browser bundles
 - AC 2: Invalid input is rejected
+
+## M2 - Relationships: relationship changes are viewed
+You can M2 - Relationships: relationship changes to be viewed, explained and persisted after refresh, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: M2 - Relationships: relationship changes are viewed
+- AC 2: Invalid input is rejected

@@ -11,6 +11,7 @@ import { validateSettings } from "./constants";
 import { ensureCurrent } from "./migrate";
 import { applyDelta, RelationshipError } from "./relationships";
 import { V2_KEY, validateUniverse } from "./schema";
+import { attachEvent, evaluateStatuses } from "./storylines";
 
 export const SAVE_DELAY_MS = 300;
 
@@ -142,6 +143,15 @@ function applyAction(universe, action) {
       }
     }
 
+    case "attachEvent": {
+      // Dispatched when an event becomes accepted: groups it into a storyline.
+      const event = universe.events.find((e) => e.id === action.eventId);
+
+      return event
+        ? evaluateStatuses(attachEvent(universe, event), universe.week)
+        : universe;
+    }
+
     case "setNotes":
       return updateWrestler(universe, action.id, () => ({
         notes: String(action.notes ?? ""),
@@ -164,7 +174,7 @@ function applyAction(universe, action) {
 
     case "setWeek":
       return Number.isInteger(action.week) && action.week >= 1
-        ? { ...universe, week: action.week }
+        ? evaluateStatuses({ ...universe, week: action.week }, action.week)
         : universe;
 
     default:

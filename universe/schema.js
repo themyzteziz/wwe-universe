@@ -56,10 +56,13 @@ import {
  *
  * @typedef {Object} Storyline
  * @property {string} id            "s_..."
- * @property {string} title
+ * @property {string} title         "{nameA} vs {nameB}" at creation
  * @property {string[]} participantIds
- * @property {string[]} eventIds
- * @property {string} status
+ * @property {string[]} eventIds    chronological
+ * @property {'open'|'resolved'|'abandoned'} status
+ * @property {number} [openedWeek]
+ * @property {number} [lastWeek]    week of the latest attached event
+ * @property {number} [resolvedWeek] week it was resolved or abandoned
  *
  * @typedef {Object} Universe
  * @property {2} schemaVersion
@@ -76,6 +79,9 @@ import {
 
 export const SCHEMA_VERSION = 2;
 export const V2_KEY = "wwe-universe-v2";
+
+const STORYLINE_STATUSES = ["open", "resolved", "abandoned"];
+const STORYLINE_WEEKS = ["openedWeek", "lastWeek", "resolvedWeek"];
 
 const ARRAY_KEYS = [
   "wrestlers",
@@ -198,9 +204,21 @@ export function validateUniverse(obj) {
     checkIds(`Match result ${i + 1} winnerIds`, m.winnerIds);
   });
   list("factions").forEach((f, i) => checkIds(`Faction ${i + 1} memberIds`, f.memberIds));
-  list("storylines").forEach((s, i) =>
-    checkIds(`Storyline ${i + 1} participantIds`, s.participantIds),
-  );
+  list("storylines").forEach((s, i) => {
+    const label = `Storyline ${i + 1}`;
+    checkIds(`${label} participantIds`, s.participantIds);
+    if (s.status !== undefined && !STORYLINE_STATUSES.includes(s.status)) {
+      errors.push(`${label} status must be one of ${STORYLINE_STATUSES.join(", ")}.`);
+    }
+    if (s.eventIds !== undefined && !Array.isArray(s.eventIds)) {
+      errors.push(`${label} eventIds must be an array.`);
+    }
+    for (const key of STORYLINE_WEEKS) {
+      if (s[key] !== undefined && !Number.isInteger(s[key])) {
+        errors.push(`${label} ${key} must be a whole number.`);
+      }
+    }
+  });
 
   const proposed = list("events").filter((e) => e.state === "proposed").length;
   if (proposed > 1) {

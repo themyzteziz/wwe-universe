@@ -147,7 +147,9 @@ describe("AC 3: validation", () => {
       title: "S",
       participantIds: ["w_a"],
       eventIds: ["e_1"],
-      status: "active",
+      status: "open",
+      openedWeek: 1,
+      lastWeek: 1,
     });
     expect(validateUniverse(u)).toEqual([]);
   });
@@ -162,6 +164,20 @@ describe("AC 3: validation", () => {
     u.storylines.push({ id: "s_1", participantIds: ["w_gone5"] });
     // 2 relationships + 1 event + 2 match result (participant, winner) + 1 faction + 1 storyline
     expect(validateUniverse(u)).toHaveLength(7);
+  });
+
+  it("flags invalid storyline status, eventIds and week fields", () => {
+    const u = universeWith();
+    u.storylines.push({ id: "s_1", participantIds: ["w_a"], eventIds: [], status: "active" });
+    u.storylines.push({ id: "s_2", participantIds: ["w_a"], eventIds: "e_1", status: "open" });
+    u.storylines.push({
+      id: "s_3",
+      participantIds: ["w_a"],
+      eventIds: [],
+      status: "open",
+      lastWeek: "3",
+    });
+    expect(validateUniverse(u)).toHaveLength(3);
   });
 
   it("flags duplicate wrestler ids", () => {

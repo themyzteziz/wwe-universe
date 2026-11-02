@@ -195,3 +195,20 @@ Match results record who fought, who won and in which week. They are stored in t
 **Styling:** `index.css` — dimmed entries use the `opacity` class and a "Rejected" text label.
 
 **Data:** Read-only. No schema change; the timeline is derived from the universe document.
+
+## CI and GitHub Pages deployment
+
+The workflow `.github/workflows/deploy.yml` builds and deploys the app to GitHub Pages.
+
+| Step (build job, in order) | Command |
+|---|---|
+| Install | `npm ci` |
+| Lint | `npm run lint` |
+| Run tests | `npm run test:run` |
+| Build | `npm run build` |
+
+- A failing lint or test step fails the build job; the deploy does not run. Do not add `continue-on-error`.
+- Vite `base` is `/wwe-universe/`, so built asset URLs are base-path aware.
+- Routing is state-based (no history routing); the app needs no server-side features.
+- Triggers, permissions, `actions/setup-node` cache, `upload-pages-artifact` and the deploy job are unchanged.
+- Automated guard: `vite.config.test.js` (run with `npx vitest run vite.config.test.js`) checks step order, base path and the unchanged deploy parts.

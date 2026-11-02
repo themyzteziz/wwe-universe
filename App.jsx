@@ -1,100 +1,76 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Header from "./components/Header";
 import WeekInfo from "./components/WeekInfo";
 import MatchGenerator from "./components/MatchGenerator";
 import RosterTable from "./components/RosterTable";
 import WrestlersManager from "./components/WrestlersManager";
-import wrestlersData from "./data/wrestlers.json";
-
-function createInitialRoster() {
-  return wrestlersData.map((wrestler) => ({
-    ...wrestler,
-    status: wrestler.note === "*" ? "used" : "available",
-    champion: false,
-  }));
-}
-
-function loadRoster() {
-  const savedRoster = localStorage.getItem("wrestlers");
-
-  if (!savedRoster) {
-    return createInitialRoster();
-  }
-
-  try {
-    const parsedRoster = JSON.parse(savedRoster);
-
-    return parsedRoster.map((wrestler) => ({
-      ...wrestler,
-      status: wrestler.status ?? "available",
-      champion: wrestler.champion ?? false,
-    }));
-  } catch {
-    return createInitialRoster();
-  }
-}
-
-function loadCurrentWeek() {
-  const savedWeek = localStorage.getItem("currentWeek");
-  return savedWeek ? Number(savedWeek) : 1;
-}
+import { useUniverse } from "./universe/UniverseContext.jsx";
 
 export default function App() {
-  const [currentWeek, setCurrentWeek] = useState(loadCurrentWeek);
-  const [wrestlers, setWrestlers] = useState(loadRoster);
+  const { universe, dispatch, readOnly, banners, dismissBanner } = useUniverse();
   const [page, setPage] = useState("booking");
 
-  useEffect(() => {
-    localStorage.setItem("currentWeek", currentWeek);
-  }, [currentWeek]);
+  return (
+    <>
+      <Header />
 
-  useEffect(() => {
-    localStorage.setItem("wrestlers", JSON.stringify(wrestlers));
-  }, [wrestlers]);
+      {banners.map((banner) => (
+        <div
+          key={banner.id}
+          className={`banner ${banner.kind}`}
+          role={banner.kind === "warning" ? "alert" : "status"}
+        >
+          <span>{banner.text}</span>
 
-return (
-  <>
-    <Header />
+          <button
+            type="button"
+            aria-label="Dismiss message"
+            onClick={() => dismissBanner(banner.id)}
+          >
+            ×
+          </button>
+        </div>
+      ))}
 
-    <nav className="main-nav">
-      <button
-        className={page === "booking" ? "active" : ""}
-        onClick={() => setPage("booking")}
-      >
-        BOOKING
-      </button>
+      <nav className="main-nav">
+        <button
+          className={page === "booking" ? "active" : ""}
+          onClick={() => setPage("booking")}
+        >
+          BOOKING
+        </button>
 
-      <button
-        className={page === "wrestlers" ? "active" : ""}
-        onClick={() => setPage("wrestlers")}
-      >
-        WRESTLERS
-      </button>
-    </nav>
+        <button
+          className={page === "wrestlers" ? "active" : ""}
+          onClick={() => setPage("wrestlers")}
+        >
+          WRESTLERS
+        </button>
+      </nav>
 
-    {page === "booking" ? (
-      <>
-        <WeekInfo
-          currentWeek={currentWeek}
-          setCurrentWeek={setCurrentWeek}
-        />
+      {page === "booking" ? (
+        <>
+          <WeekInfo currentWeek={universe.week} dispatch={dispatch} />
 
-        <MatchGenerator
-          currentWeek={currentWeek}
-          wrestlers={wrestlers}
-        />
+          <MatchGenerator
+            currentWeek={universe.week}
+            wrestlers={universe.wrestlers}
+            matchResults={universe.matchResults}
+            onRecord={
+              readOnly
+                ? undefined
+                : (result) => dispatch({ type: "recordResult", result })
+            }
+            onUndo={
+              readOnly ? undefined : () => dispatch({ type: "undoLastResult" })
+            }
+          />
 
-        <RosterTable
-          wrestlers={wrestlers}
-          setWrestlers={setWrestlers}
-        />
-      </>
-    ) : (
-      <WrestlersManager
-        wrestlers={wrestlers}
-        setWrestlers={setWrestlers}
-      />
-    )}
-  </>
-);
+          <RosterTable wrestlers={universe.wrestlers} dispatch={dispatch} />
+        </>
+      ) : (
+        <WrestlersManager wrestlers={universe.wrestlers} dispatch={dispatch} />
+      )}
+    </>
+  );
 }

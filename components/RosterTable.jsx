@@ -1,58 +1,7 @@
 export default function RosterTable({
   wrestlers,
-  setWrestlers,
+  dispatch,
 }) {
- function toggleStatus(name) {
-  setWrestlers((currentWrestlers) =>
-    currentWrestlers.map((wrestler) => {
-      if (wrestler.name !== name) {
-        return wrestler;
-      }
-
-      let newStatus;
-
-      if (wrestler.status === "available") {
-        newStatus = "title-shot";
-      } else if (wrestler.status === "title-shot") {
-        newStatus = "used";
-      } else {
-        newStatus = "available";
-      }
-
-      return {
-        ...wrestler,
-        status: newStatus,
-      };
-    })
-  );
-}
-
-  function changeWins(name, amount) {
-    setWrestlers((currentWrestlers) =>
-      currentWrestlers.map((wrestler) =>
-        wrestler.name === name
-          ? {
-              ...wrestler,
-              wins: Math.max(0, wrestler.wins + amount),
-            }
-          : wrestler
-      )
-    );
-  }
-
-  function toggleChampion(name) {
-    setWrestlers((currentWrestlers) =>
-      currentWrestlers.map((wrestler) =>
-        wrestler.name === name
-          ? {
-              ...wrestler,
-              champion: !wrestler.champion,
-            }
-          : wrestler
-      )
-    );
-  }
-
   const sortedWrestlers = [...wrestlers].sort(
     (a, b) => b.wins - a.wins
   );
@@ -77,7 +26,7 @@ export default function RosterTable({
           <tbody>
             {sortedWrestlers.map((wrestler) => (
               <tr
-                key={wrestler.name}
+                key={wrestler.id}
                 className={
                   wrestler.champion ? "champion-row" : ""
                 }
@@ -97,7 +46,11 @@ export default function RosterTable({
                     <button
                       className="win-button minus"
                       onClick={() =>
-                        changeWins(wrestler.name, -1)
+                        dispatch({
+                          type: "changeWins",
+                          id: wrestler.id,
+                          amount: -1,
+                        })
                       }
                       disabled={wrestler.wins === 0}
                       aria-label={`Remove one win from ${wrestler.name}`}
@@ -112,7 +65,11 @@ export default function RosterTable({
                     <button
                       className="win-button plus"
                       onClick={() =>
-                        changeWins(wrestler.name, 1)
+                        dispatch({
+                          type: "changeWins",
+                          id: wrestler.id,
+                          amount: 1,
+                        })
                       }
                       aria-label={`Add one win to ${wrestler.name}`}
                     >
@@ -145,7 +102,10 @@ export default function RosterTable({
                       wrestler.champion ? "active" : ""
                     }`}
                     onClick={() =>
-                      toggleChampion(wrestler.name)
+                      dispatch({
+                        type: "toggleChampion",
+                        id: wrestler.id,
+                      })
                     }
                   >
                     {wrestler.champion
@@ -158,7 +118,10 @@ export default function RosterTable({
                   <button
                     className="status-button"
                     onClick={() =>
-                      toggleStatus(wrestler.name)
+                      dispatch({
+                        type: "cycleStatus",
+                        id: wrestler.id,
+                      })
                     }
                   >
                     Change Status
@@ -166,7 +129,7 @@ export default function RosterTable({
                 </td>
 
                 <td>
-                  {wrestler.note === "WILL RETURN"
+                  {wrestler.notes === "WILL RETURN"
                     ? "WILL RETURN"
                     : "—"}
                 </td>

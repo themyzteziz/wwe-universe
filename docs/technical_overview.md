@@ -27,3 +27,7 @@
 ## US-117 Keep the app functional without paid AI APIs
 - `src/bookings/keep-app-functional.service.ts`
 - `test/bookings/keep-app-functional.test.ts`
+
+## US-118 Avoid embedding API secrets in browser bundles or localStorage
+- `src/bookings/avoid-embedding-api.service.ts`
+- `test/bookings/avoid-embedding-api.test.ts`

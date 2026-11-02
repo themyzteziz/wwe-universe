@@ -26,3 +26,6 @@ The existing application, extended with `Booking`, `Product`, `Document`, `Proje
 ### FT-120 Delivery milestones and acceptance criteria
 - **US-121** M2 - Relationships: relationship changes are viewed — development
 - **US-122** M3 - Events: the player generate,s accept/reject — development
+
+### FT-124 Out of scope for initial version
+- **US-125** These can be explored later, but never block the first working simulation — development

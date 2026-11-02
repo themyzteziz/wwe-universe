@@ -34,3 +34,14 @@ You can wrestlers to develop believable histories, alliances, rivalries and unex
 
 - AC 1: Wrestlers develop believable histories
 - AC 2: Invalid input is rejected
+
+## Player plays matches in WWE 2K26 and manually enters results
+You can the player plays matches in WWE 2K26 and manually enters results. The app to never assume an unreported winner, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: Player plays matches in WWE 2K26
+- AC 2: Invalid input is rejected

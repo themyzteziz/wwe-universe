@@ -34,7 +34,7 @@ const unavailableStorage = {
   },
 };
 
-function getStorage() {
+export function getStorage() {
   try {
     return window.localStorage;
   } catch {
@@ -217,14 +217,21 @@ export function reducer(state, action) {
         }),
       };
 
+    // The only action allowed in read-only mode. Settings are re-validated here whatever
+    // the caller did, and AI is never switched on or pointed at an endpoint by a replacement.
     case "replaceUniverse": {
-      if (!action.universe || validateUniverse(action.universe).length > 0) {
+      if (
+        !action.universe ||
+        validateUniverse(action.universe).length > 0 ||
+        !validateSettings(action.universe.settings).ok
+      ) {
         return state;
       }
 
       const settings = {
         ...validateSettings(action.universe.settings).value,
         aiEnabled: false,
+        aiEndpoint: "",
       };
 
       return {

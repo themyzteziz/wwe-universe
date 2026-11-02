@@ -5,6 +5,11 @@
 1. Event types and rarity
 2. How to save and reload your universe
 3. Upgrading from the previous version
+4. Wrestler relationship profiles
+5. How to record a match result and undo it
+6. How to open the UNIVERSE view
+7. How to view the universe timeline
+8. How to import a backup file
 
 ## Event types and rarity
 
@@ -62,7 +67,7 @@ Your universe is saved automatically. You do not need a save button.
 
 **Warnings**
 - **"Changes may not be saved"** (yellow banner): the browser could not store your data, for example because storage is full or disabled. The app keeps working, but changes after this point are only kept until you close the page. Free browser storage or enable site storage, then reload.
-- **Read-only warning**: the saved universe could not be read, for example because it was damaged or made by a newer version of the app. Nothing is written over it, so your saved data is protected. Check the banner for the next step before you make further changes.
+- **Read-only warning**: the saved universe could not be read, for example because it was damaged or made by a newer version of the app. Nothing is written over it, so your saved data is protected. Import a backup file (see "How to import a backup file") to replace it.
 - **Migration notice** (dismissible banner): shown once when an older saved universe was upgraded. You can close it.
 
 ## Wrestler relationship profiles
@@ -121,7 +126,7 @@ Use this after you have played a match in WWE 2K26 and want to log the winner in
 
 1. Click the **UNIVERSE** tab in the top navigation, next to **BOOKING** and **WRESTLERS**.
 2. Choose a sub-tab: **Timeline**, **Relationships**, **Settings** or **Backup**. **Timeline** opens by default.
-3. Sub-tab content is shown as "coming soon" until the panels are delivered.
+3. **Relationships** and **Settings** show "coming soon" until their panels are delivered.
 
 **Tip:** A number badge on the **UNIVERSE** tab shows how many event proposals are waiting for your review. The badge disappears when there are none.
 
@@ -144,3 +149,25 @@ Tips:
 - If no entries exist yet, the timeline shows "Nothing has happened yet".
 - If your filters hide every entry, the timeline shows "No entries match these filters". Clear a filter to see more.
 - The timeline is read-only. You cannot edit or delete entries here.
+
+## How to import a backup file
+
+Use this to restore a universe from a file you exported earlier, or to move your universe to another browser.
+
+1. Open **UNIVERSE** > **Backup**.
+2. Under **Import**, choose the backup file (`.json`).
+3. If the file is valid, the app asks: "Replace current universe (X wrestlers, Y events) with file (A wrestlers, B events)?" Click **Replace universe** to continue or **Cancel** to keep everything as it is.
+4. After you confirm, the universe is replaced, the timeline and relationship history from the file are shown, and automatic saving continues.
+
+**What is kept and what is not**
+- A safety copy of your current universe is stored first, in the browser storage key `wwe-universe-v2.pre-import`. Each import overwrites the previous safety copy.
+- AI settings are never imported. After an import, AI descriptions are off and no AI address is set, whatever the file says.
+- Old roster files from the previous version of the app are accepted and converted.
+
+**To get your previous universe back**
+There is no restore button yet. In your browser's developer tools (Application > Local Storage), copy the value of `wwe-universe-v2.pre-import` into the key `wwe-universe-v2`, then reload the page.
+
+**Warnings**
+- **"This file cannot be imported"**: the file is not valid JSON, is larger than 5 MB, was made by a newer version of the app, or has damaged data (for example a reference to a wrestler that does not exist). The list shows up to 20 problems. Your current universe was not changed.
+- **"No safety copy ... could be kept"**: browser storage is full, so the safety copy could not be written. Cancel and use **Export** first to keep your current universe, or choose **Import anyway** to replace it without a safety copy.
+- If the app showed the read-only warning because your saved universe was unreadable, a successful import replaces it and ends read-only mode. The unreadable data is kept in the safety copy.

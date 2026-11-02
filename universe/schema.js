@@ -1,4 +1,10 @@
-import { DEFAULT_SETTINGS, validateSettings } from "./constants.js";
+import {
+  DEFAULT_SETTINGS,
+  SCORE_MAX,
+  SCORE_MIN,
+  stateOf,
+  validateSettings,
+} from "./constants.js";
 
 /**
  * @typedef {Object} Wrestler
@@ -169,9 +175,22 @@ export function validateUniverse(obj) {
     }
   };
 
+  const pairs = new Set();
   list("relationships").forEach((r, i) => {
-    checkIds(`Relationship ${i + 1} fromId`, [r.fromId]);
-    checkIds(`Relationship ${i + 1} toId`, [r.toId]);
+    const label = `Relationship ${i + 1}`;
+    checkIds(`${label} fromId`, [r.fromId]);
+    checkIds(`${label} toId`, [r.toId]);
+    if (r.fromId === r.toId) errors.push(`${label} cannot be between a wrestler and themselves.`);
+    const pair = `${r.fromId}>${r.toId}`;
+    if (pairs.has(pair)) errors.push(`${label} duplicates the relationship ${pair}.`);
+    pairs.add(pair);
+    if (!Number.isInteger(r.score) || r.score < SCORE_MIN || r.score > SCORE_MAX) {
+      errors.push(`${label} score must be a whole number from ${SCORE_MIN} to ${SCORE_MAX}.`);
+    } else if (r.state !== stateOf(r.score)) {
+      errors.push(
+        `${label} state ${JSON.stringify(r.state)} does not match its score (expected "${stateOf(r.score)}").`,
+      );
+    }
   });
   list("events").forEach((e, i) => checkIds(`Event ${i + 1} participantIds`, e.participantIds));
   list("matchResults").forEach((m, i) => {

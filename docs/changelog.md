@@ -2,4 +2,4 @@
 
 ## Changelog
 
-- 2026-11-02 — US-116 Upgrade to React 19 and set up Vitest + React Testing Library: React 19 confirmed, Vitest/RTL smoke test added, lint fixed with a flat config, and `npm run check` now runs tests too.
+- {2026-11-02} — US-122 Seedable random number generator: added `universe/sim/rng.js` (seeded, injectable RNG with `deriveSeed`/`defaultSeed`) with Vitest tests; fixed lint config.

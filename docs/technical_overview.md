@@ -1,53 +1,37 @@
-# Technical overview — WWE Universe
+# Technical overview
 
-## US-110 Many matches produce no event
-- `src/config/many-matches-produce.ts`
-- `test/config/many-matches-produce.test.ts`
+## Stack and tooling
 
-## US-104 Surprise emerges from simulation rules and prior events
-- `src/products/surprise-emerges-simulation.service.ts`
-- `test/products/surprise-emerges-simulation.test.ts`
+- **Runtime:** React 19.2.4 (`react`, `react-dom`), built with Vite 8.1.5 and `@vitejs/plugin-react` 6.0.3 (both pinned).
+- **Base path:** `vite.config.js` sets `base: "/wwe-universe/"` for GitHub Pages. Do not change it.
+- **Tests:** Vitest (^4.1.0) with jsdom (^27.0.0) and React Testing Library. Setup in `vitest.setup.js`. Tests are co-located `*.test.js(x)` files; `src/**` and `test/**/*.ts` stubs are excluded.
+- **Lint:** flat config in `eslint.config.mjs` (ESLint with `@eslint/js`, `react-hooks`, `react-refresh`, `globals`). Ignores `dist/**`, `node_modules/**`, `src/**`, `test/**/*.ts`.
+- **Scripts:** `dev`, `build`, `lint`, `test` (watch), `test:run` (once), `check` (lint + test:run + build).
+- **Dependencies:** exact versions in `package-lock.json`. Use `npm ci` in CI.
+- **Node:** version from `.github/workflows/deploy.yml`; no change needed for the pinned engines.
 
-## US-103 Wrestlers develop believable histories
-- `src/products/wrestlers-develop-believable.service.ts`
-- `test/products/wrestlers-develop-believable.test.ts`
+## Universe data schema (v2)
 
-## US-107 Player plays matches in WWE 2K26 and manually enters results
-- `src/bookings/player-plays-matches.service.ts`
-- `test/bookings/player-plays-matches.test.ts`
+- **Location:** `universe/` (leaf module `constants.js`; `schema.js` imports only from `constants.js`).
+- **Storage key:** `wwe-universe-v2` (`V2_KEY`). Document has `schemaVersion: 2`; legacy data is `schemaVersion` 1 (keys `wrestlers`, `currentWeek`), migrated by a separate story.
+- **Wrestler IDs:** `w_` + UUID from `newId('w')`, generated once and never derived from the name. Renaming changes `name` only.
+- **Entities:** Universe, Wrestler (`notes` string, `legacy?`), MatchResult, Event (`state` proposed/accepted/rejected, `suggestions?`, `matchId?`, `rerollCount?`), Relationship, Faction, Storyline, Settings.
+- **Validation:** `validateUniverse(obj)` returns string errors, never throws. Checks schema version, required arrays, referential integrity (IDs resolve to a wrestler or `formerWrestlers` key), duplicate wrestler IDs, and at most one `proposed` event.
+- **Settings:** `DEFAULT_SETTINGS` = eventFrequency 25, chaos 50, historySensitivity 50, autoPropose true, seed null (set integer on create), aiEnabled false, aiEndpoint "". `validateSettings` requires three integer sliders 0–100, boolean flags, and an `aiEndpoint` that is empty or an `https:` URL.
+- **Tests:** `npx vitest run universe`.
 
-## US-111 Events are influenced by wrestler history
-- `src/bookings/events-influenced-wrestler.service.ts`
-- `test/bookings/events-influenced-wrestler.test.ts`
+## Simulation engine: seeded randomness
 
-## US-114 Stable wrestler IDs are independent of wrestler names to support renames
-- `src/bookings/stable-wrestler-ids.service.ts`
-- `test/bookings/stable-wrestler-ids.test.ts`
+Module: `universe/sim/rng.js` (pure, no I/O, no imports).
 
-## US-117 Keep the app functional without paid AI APIs
-- `src/bookings/keep-app-functional.service.ts`
-- `test/bookings/keep-app-functional.test.ts`
+| Function | Purpose |
+|---|---|
+| `createRng(seed?)` | Independent RNG closure. Returns `{seed, next, int, pick, weightedPick}`. Seed normalised to uint32; no seed uses `defaultSeed()`. |
+| `deriveSeed(seed, n)` | Deterministic uint32 sub-seed. Reroll uses `deriveSeed(prevSeed, attempt)` with attempt starting at 1. `n=0` is reserved for the description stream (US-127). |
+| `defaultSeed()` | Time-based seed with a module-level counter. Does not use `Math.random`. |
 
-## US-118 Avoid embedding API secrets in browser bundles or localStorage
-- `src/bookings/avoid-embedding-api.service.ts`
-- `test/bookings/avoid-embedding-api.test.ts`
+Rules:
+- Code in `universe/sim/` must never call `Math.random`. Enforced by a test in `rng.test.js`.
+- Each event proposal stores its seed so it can be replayed.
 
-## US-121 M2 - Relationships: relationship changes are viewed
-- `src/bookings/m2-relationships-relationship.service.ts`
-- `test/bookings/m2-relationships-relationship.test.ts`
-
-## US-122 M3 - Events: the player generate,s accept/reject
-- `src/bookings/m3-events-player.service.ts`
-- `test/bookings/m3-events-player.test.ts`
-
-## US-125 These can be explored later, but never block the first working simulation
-- `src/bookings/these-can-be.service.ts`
-- `test/bookings/these-can-be.test.ts`
-
-## US-128 Relationships evolve naturally based on match results
-- `src/bookings/relationships-evolve-naturally.service.ts`
-- `test/bookings/relationships-evolve-naturally.test.ts`
-
-## US-129 **Goal:** Create a living WWE Universe where anything happen,s wrestlers develop
-- `src/bookings/goal-create-living.service.ts`
-- `test/bookings/goal-create-living.test.ts`
+Tooling: Vitest is the test runner (`npm run test`). Lint config is `eslint.config.mjs` (flat config, `@eslint/js`, `react-hooks`, `react-refresh`).

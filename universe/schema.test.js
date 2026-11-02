@@ -115,7 +115,7 @@ describe("AC 3: validation", () => {
 
   it("accepts valid data", () => {
     const u = universeWith();
-    u.relationships.push({ fromId: "w_a", toId: "w_b", score: 10, state: "ally", history: [] });
+    u.relationships.push({ fromId: "w_a", toId: "w_b", score: 10, state: "neutral", history: [] });
     u.matchResults.push({
       id: "m_1",
       week: 1,

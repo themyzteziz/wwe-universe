@@ -19,5 +19,6 @@ The existing application, extended with `Booking`, `Product`, `Document`, `Proje
 - **US-103** Wrestlers develop believable histories — development
 - **US-104** Surprise emerges from simulation rules and prior events — development
 
-### FT-113 Data model and persistence
-- **US-114** Stable wrestler IDs are independent of wrestler names to support renames — development
+### FT-109 Simulation engine
+- **US-110** Many matches produce no event — configuration
+- **US-111** Events are influenced by wrestler history — development

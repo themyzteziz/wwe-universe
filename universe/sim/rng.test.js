@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import { readdirSync, readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { createRng, deriveSeed, defaultSeed } from './rng.js';
 
@@ -103,7 +102,8 @@ describe('AC 4: default seed', () => {
 
 describe('engine rule: no unseeded randomness', () => {
   it('no non-test universe/sim/*.js file calls Math.random', () => {
-    const dir = fileURLToPath(new URL('./', import.meta.url));
+    // import.meta.dirname works in the jsdom test environment, where import.meta.url is not a file: URL.
+    const dir = import.meta.dirname;
     const files = readdirSync(dir).filter((f) => f.endsWith('.js') && !f.endsWith('.test.js'));
     expect(files).toContain('rng.js');
     for (const f of files) expect(readFileSync(join(dir, f), 'utf8')).not.toContain('Math.random');

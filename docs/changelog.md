@@ -2,7 +2,8 @@
 
 ## Changelog
 
-- 2026-11-02 — US-115 Universe persistence layer and React state provider: universe is saved automatically (300 ms debounce) and reloaded after refresh; BOOKING and WRESTLERS now use a shared store; storage and read-only warnings shown as banners.
+- 2026-11-02 — US-119 Relationship profile view per wrestler: PROFILES page shows allies, rivals, enemies and neutral relationships with expandable history and a separate notes block (read-only).
+- 2026-11-02 — US-118 Relationship model: scale, states and explainable history
 
 ## 2026-11-02 — US-118 Relationship model: scale, states and explainable history
 

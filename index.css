@@ -320,6 +320,51 @@ main {
   margin-left: 10px;
 }
 
+.winner-button {
+  margin-left: 8px;
+  padding: 4px 10px;
+  background: #198754;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.winner-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.result-recorded {
+  margin-bottom: 0;
+  color: #7cff9c;
+  font-weight: bold;
+}
+
+.undo-result {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  color: #bbb;
+}
+
+.undo-result button {
+  padding: 7px 12px;
+  background: #2d2d2d;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.undo-result button:hover {
+  background: #444;
+}
+
 .match-reason {
   color: #bbb;
   margin-bottom: 0;

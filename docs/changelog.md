@@ -2,4 +2,4 @@
 
 ## Changelog
 
-- {2026-11-02} — US-122 Seedable random number generator: added `universe/sim/rng.js` (seeded, injectable RNG with `deriveSeed`/`defaultSeed`) with Vitest tests; fixed lint config.
+- 2026-11-02 — US-123 Event type catalogue, rarity tiers and default probabilities: added the eight event types with rarity tiers, cooldowns and validation in `universe/sim/config.js`; no visible change for players.

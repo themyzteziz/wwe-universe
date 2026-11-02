@@ -5,7 +5,7 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 
 export default defineConfig([
-  globalIgnores(["dist/**", "node_modules/**", "src/**", "test/**/*.ts"]),
+  globalIgnores(["dist/**", "node_modules/**", "public/**", "src/**", "test/**/*.ts"]),
   js.configs.recommended,
   {
     files: ["**/*.{js,jsx,mjs}"],

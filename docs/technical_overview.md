@@ -19,3 +19,19 @@
 - **Validation:** `validateUniverse(obj)` returns string errors, never throws. Checks schema version, required arrays, referential integrity (IDs resolve to a wrestler or `formerWrestlers` key), duplicate wrestler IDs, and at most one `proposed` event.
 - **Settings:** `DEFAULT_SETTINGS` = eventFrequency 25, chaos 50, historySensitivity 50, autoPropose true, seed null (set integer on create), aiEnabled false, aiEndpoint "". `validateSettings` requires three integer sliders 0–100, boolean flags, and an `aiEndpoint` that is empty or an `https:` URL.
 - **Tests:** `npx vitest run universe`.
+
+## Simulation engine: seeded randomness
+
+Module: `universe/sim/rng.js` (pure, no I/O, no imports).
+
+| Function | Purpose |
+|---|---|
+| `createRng(seed?)` | Independent RNG closure. Returns `{seed, next, int, pick, weightedPick}`. Seed normalised to uint32; no seed uses `defaultSeed()`. |
+| `deriveSeed(seed, n)` | Deterministic uint32 sub-seed. Reroll uses `deriveSeed(prevSeed, attempt)` with attempt starting at 1. `n=0` is reserved for the description stream (US-127). |
+| `defaultSeed()` | Time-based seed with a module-level counter. Does not use `Math.random`. |
+
+Rules:
+- Code in `universe/sim/` must never call `Math.random`. Enforced by a test in `rng.test.js`.
+- Each event proposal stores its seed so it can be replayed.
+
+Tooling: Vitest is the test runner (`npm run test`). Lint config is `eslint.config.mjs` (flat config, `@eslint/js`, `react-hooks`, `react-refresh`).

@@ -1,0 +1,12 @@
+{
+  "wrestlers": [
+    { "name": "ROMAN REIGNS", "status": "available", "wins": 6, "champion": true, "note": "" },
+    { "name": "CODY RHODES", "status": "title-shot", "wins": 4, "champion": false, "note": "" },
+    { "name": "SETH ROLLINS", "status": "used", "wins": 3, "champion": false, "note": "*" },
+    { "name": "RHEA RIPLEY", "status": "available", "wins": 2, "champion": false, "note": "" },
+    { "name": "DRAKE MAVERICK", "status": "available", "wins": 0, "champion": false, "note": "WILL RETURN" },
+    { "name": "LA KNIGHT", "status": "available", "wins": 1, "champion": false, "note": "" },
+    { "name": "LA KNIGHT", "status": "used", "wins": 0, "champion": false, "note": "" }
+  ],
+  "currentWeek": 7
+}

@@ -23,6 +23,6 @@ The existing application, extended with `Booking`, `Product`, `Document`, `Proje
 - **US-110** Many matches produce no event — configuration
 - **US-111** Events are influenced by wrestler history — development
 
-### FT-116 Engineering and quality
-- **US-117** Keep the app functional without paid AI APIs — development
-- **US-118** Avoid embedding API secrets in browser bundles or localStorage — development
+### FT-120 Delivery milestones and acceptance criteria
+- **US-121** M2 - Relationships: relationship changes are viewed — development
+- **US-122** M3 - Events: the player generate,s accept/reject — development

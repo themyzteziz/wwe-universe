@@ -1,31 +1,40 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-
-const browserAndNode = {
-  window: "readonly",
-  document: "readonly",
-  localStorage: "readonly",
-  crypto: "readonly",
-  console: "readonly",
-  alert: "readonly",
-  URL: "readonly",
-  setTimeout: "readonly",
-  clearTimeout: "readonly",
-};
+import js from "@eslint/js";
+import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
 
 export default defineConfig([
-  globalIgnores(["dist/**", "node_modules/**"]),
+  globalIgnores(["dist/**", "node_modules/**", "src/**", "test/**/*.ts"]),
+  js.configs.recommended,
   {
     files: ["**/*.{js,jsx,mjs}"],
+    plugins: {
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
+    },
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       parserOptions: { ecmaFeatures: { jsx: true } },
-      globals: browserAndNode,
+      globals: {
+        ...globals.browser,
+        describe: "readonly",
+        it: "readonly",
+        expect: "readonly",
+        vi: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+      },
     },
     rules: {
-      "no-undef": "error",
-      // Capitalised names are React components used in JSX, which core ESLint cannot see.
-      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z]" }],
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "react-refresh/only-export-components": [
+        "warn",
+        { allowConstantExport: true },
+      ],
+      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
     },
   },
 ]);

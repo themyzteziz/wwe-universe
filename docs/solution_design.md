@@ -14,3 +14,7 @@ The existing application, extended with `Booking`, `Product`, `Document`, `Proje
 
 ### FT-106 Player control and scope
 - **US-107** Player plays matches in WWE 2K26 and manually enters results — development
+
+### FT-102 Product vision
+- **US-103** Wrestlers develop believable histories — development
+- **US-104** Surprise emerges from simulation rules and prior events — development

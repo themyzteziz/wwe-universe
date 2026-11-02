@@ -19,3 +19,11 @@
 ## US-111 Events are influenced by wrestler history
 - `src/bookings/events-influenced-wrestler.service.ts`
 - `test/bookings/events-influenced-wrestler.test.ts`
+
+## US-114 Stable wrestler IDs are independent of wrestler names to support renames
+- `src/bookings/stable-wrestler-ids.service.ts`
+- `test/bookings/stable-wrestler-ids.test.ts`
+
+## US-117 Keep the app functional without paid AI APIs
+- `src/bookings/keep-app-functional.service.ts`
+- `test/bookings/keep-app-functional.test.ts`

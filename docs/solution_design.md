@@ -18,3 +18,6 @@ The existing application, extended with `Booking`, `Product`, `Document`, `Proje
 ### FT-102 Product vision
 - **US-103** Wrestlers develop believable histories — development
 - **US-104** Surprise emerges from simulation rules and prior events — development
+
+### FT-113 Data model and persistence
+- **US-114** Stable wrestler IDs are independent of wrestler names to support renames — development

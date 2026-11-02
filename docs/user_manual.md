@@ -126,3 +126,21 @@ Use this after you have played a match in WWE 2K26 and want to log the winner in
 **Tip:** A number badge on the **UNIVERSE** tab shows how many event proposals are waiting for your review. The badge disappears when there are none.
 
 **Tip:** On narrow screens the tabs wrap onto several lines instead of scrolling the page sideways.
+
+## How to view the universe timeline
+
+Use the Timeline to review how your universe unfolded.
+
+1. Open the **UNIVERSE** view and select the **Timeline** tab.
+2. Entries are listed newest first. Click the order button to show oldest first; click it again to switch back.
+3. To narrow the list, use the filters:
+   - **Week from** and **Week to** — show only entries within this week range. If the "from" week is greater than the "to" week, a message appears and no filter is applied.
+   - **Wrestler** — show only entries that include this wrestler.
+   - **Event type** — show only events of this type. Match results are hidden while an event type is selected.
+4. Rejected events are hidden by default. Tick **Show rejected** to display them. They appear dimmed and marked **Rejected**.
+5. The list shows 50 entries per page. Use **Next** and **Prev** to move between pages. Changing any filter returns you to page 1.
+
+Tips:
+- If no entries exist yet, the timeline shows "Nothing has happened yet".
+- If your filters hide every entry, the timeline shows "No entries match these filters". Clear a filter to see more.
+- The timeline is read-only. You cannot edit or delete entries here.

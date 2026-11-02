@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Timeline from "./Timeline.jsx";
 
 export const SUB_TABS = ["Timeline", "Relationships", "Settings", "Backup"];
 
@@ -30,7 +31,11 @@ export default function UniverseView() {
         role="tabpanel"
         aria-labelledby={`universe-tab-${subTab}`}
       >
-        <p className="universe-placeholder">{subTab} is coming soon.</p>
+        {subTab === "Timeline" ? (
+          <Timeline />
+        ) : (
+          <p className="universe-placeholder">{subTab} is coming soon.</p>
+        )}
       </div>
     </section>
   );

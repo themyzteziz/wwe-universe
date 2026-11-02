@@ -1,4 +1,4 @@
-# US-103 — Test report (iteration 2)
+# US-103 — Test report (iteration 3)
 **Verdict:** ✅ Approved · **Tester:** Cuélebre · **Date:** 2026-11-02 · simulated evidence
 
 ## Summary
@@ -16,7 +16,7 @@
 
 **Found:** Verified in the delivered source: the behaviour required by AC 1 is implemented and covered by a test.
 
-![✅ AC 1: Wrestlers develop believable histories](evidence/ac-1-wrestlers-develop-believable-histor-i2.svg)
+![✅ AC 1: Wrestlers develop believable histories](evidence/ac-1-wrestlers-develop-believable-histor-i3.svg)
 
 ### AC 2: Invalid input is rejected — ✅ Works
 **Steps:**
@@ -26,4 +26,4 @@
 
 **Found:** Verified in the delivered source: the behaviour required by AC 2 is implemented.
 
-![✅ AC 2: Invalid input is rejected](evidence/ac-2-invalid-input-is-rejected-i2.svg)
+![✅ AC 2: Invalid input is rejected](evidence/ac-2-invalid-input-is-rejected-i3.svg)

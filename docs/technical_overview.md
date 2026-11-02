@@ -35,3 +35,7 @@
 ## US-121 M2 - Relationships: relationship changes are viewed
 - `src/bookings/m2-relationships-relationship.service.ts`
 - `test/bookings/m2-relationships-relationship.test.ts`
+
+## US-122 M3 - Events: the player generate,s accept/reject
+- `src/bookings/m3-events-player.service.ts`
+- `test/bookings/m3-events-player.test.ts`

@@ -100,3 +100,14 @@ You can M2 - Relationships: relationship changes to be viewed, explained and per
 
 - AC 1: M2 - Relationships: relationship changes are viewed
 - AC 2: Invalid input is rejected
+
+## M3 - Events: the player generate,s accept/reject
+You can M3 - Events: the player to generate, accept/reject and review non-repetitive match-adjacent events, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: M3 - Events: the player generate,s accept/reject
+- AC 2: Invalid input is rejected

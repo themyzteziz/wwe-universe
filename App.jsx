@@ -9,7 +9,7 @@ import WrestlerPicker from "./components/universe/WrestlerPicker";
 import { useUniverse } from "./universe/UniverseContext.jsx";
 
 export default function App() {
-  const { universe, dispatch, banners, dismissBanner } = useUniverse();
+  const { universe, dispatch, readOnly, banners, dismissBanner } = useUniverse();
   const [page, setPage] = useState("booking");
   const [profileId, setProfileId] = useState(null);
 
@@ -72,6 +72,15 @@ export default function App() {
           <MatchGenerator
             currentWeek={universe.week}
             wrestlers={universe.wrestlers}
+            matchResults={universe.matchResults}
+            onRecord={
+              readOnly
+                ? undefined
+                : (result) => dispatch({ type: "recordResult", result })
+            }
+            onUndo={
+              readOnly ? undefined : () => dispatch({ type: "undoLastResult" })
+            }
           />
 
           <RosterTable wrestlers={universe.wrestlers} dispatch={dispatch} />

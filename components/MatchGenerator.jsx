@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { defaultSeed } from "../universe/sim/rng.js";
+import { newId } from "../universe/schema.js";
 
 const weekTypes = ["1v1", "3MAN ELI", "4MAN ELI"];
 
@@ -23,9 +25,17 @@ function getRandomWrestlers(wrestlers, amount) {
   return shuffle(wrestlers).slice(0, amount);
 }
 
+/**
+ * `onRecord(payload)` and `onUndo()` dispatch `recordResult` / `undoLastResult`
+ * on the Universe store; `matchResults` is `universe.matchResults`. Without
+ * `onRecord` the generator works as before and shows no result controls.
+ */
 export default function MatchGenerator({
   currentWeek,
   wrestlers,
+  matchResults = [],
+  onRecord,
+  onUndo,
 }) {
   const [generatedMatch, setGeneratedMatch] =
     useState(null);
@@ -69,11 +79,40 @@ export default function MatchGenerator({
     }
 
     setGeneratedMatch({
+      matchId: newId("m"),
       title: "Normal Match",
       type: currentMatchType,
       participants,
     });
   }
+
+  function recordWinner(winner) {
+    onRecord({
+      id: generatedMatch.matchId,
+      recordedAt: new Date().toISOString(),
+      seed: defaultSeed(),
+      week: currentWeek,
+      type: generatedMatch.type,
+      participantIds: generatedMatch.participants.map(
+        (wrestler) => wrestler.id
+      ),
+      winnerIds: [winner.id],
+    });
+
+    setGeneratedMatch({
+      ...generatedMatch,
+      recordedWinner: winner.name,
+    });
+  }
+
+  const lastResult = matchResults.at(-1);
+  const lastWinners = lastResult?.winnerIds
+    .map(
+      (winnerId) =>
+        wrestlers.find((wrestler) => wrestler.id === winnerId)
+          ?.name ?? "A removed wrestler"
+    )
+    .join(", ");
 
   return (
     <section className="match-generator">
@@ -117,6 +156,21 @@ export default function MatchGenerator({
                   >
                     {wrestler.name}
 
+                    {onRecord && (
+                      <button
+                        className="winner-button"
+                        onClick={() =>
+                          recordWinner(wrestler)
+                        }
+                        disabled={Boolean(
+                          generatedMatch.recordedWinner
+                        )}
+                        aria-label={`Mark ${wrestler.name} as winner`}
+                      >
+                        Winner
+                      </button>
+                    )}
+
                     {index <
                       generatedMatch.participants.length -
                         1 && (
@@ -129,8 +183,28 @@ export default function MatchGenerator({
                 )
               )}
             </div>
+
+            {generatedMatch.recordedWinner && (
+              <p className="result-recorded">
+                Result recorded:{" "}
+                {generatedMatch.recordedWinner}
+              </p>
+            )}
           </div>
         )}
+
+      {onUndo && lastResult && (
+        <div className="undo-result">
+          <button onClick={onUndo}>
+            Undo last result
+          </button>
+
+          <span>
+            Week {lastResult.week} {lastResult.type}:{" "}
+            {lastWinners} won
+          </span>
+        </div>
+      )}
     </section>
   );
 }

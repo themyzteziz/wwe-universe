@@ -45,3 +45,25 @@ You can the player plays matches in WWE 2K26 and manually enters results. The ap
 
 - AC 1: Player plays matches in WWE 2K26
 - AC 2: Invalid input is rejected
+
+## Events are influenced by wrestler history
+You can events to be influenced by wrestler history, current relationships, recent results, existing feuds and narrative context, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: Events are influenced by wrestler history
+- AC 2: Invalid input is rejected
+
+## Stable wrestler IDs are independent of wrestler names to support renames
+You can stable wrestler IDs to be independent of wrestler names to support renames and reliable relationship links, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: Stable wrestler IDs are independent of wrestler
+- AC 2: Invalid input is rejected

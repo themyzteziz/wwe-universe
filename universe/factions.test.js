@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { stateOf } from "./constants.js";
 import {
   avgInternalScore,
   canForm,
@@ -17,7 +18,7 @@ import { reducer } from "./UniverseContext.jsx";
 const IDS = ["w_1", "w_2", "w_3", "w_4", "w_5", "w_6"];
 
 function rel(fromId, toId, score) {
-  return { fromId, toId, score, state: "neutral", history: [] };
+  return { fromId, toId, score, state: stateOf(score), history: [] };
 }
 
 // Every ordered pair among `ids` gets `score`.

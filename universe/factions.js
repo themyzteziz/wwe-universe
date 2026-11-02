@@ -3,6 +3,7 @@
 // the caller keeps its universe unchanged.
 
 import { ALLY_MIN } from "./constants.js";
+import { getRelationship, nameOf } from "./relationships.js";
 import { newId } from "./schema.js";
 
 export const MIN_MEMBERS = 2;
@@ -41,12 +42,8 @@ const NAME_RETRIES = 10;
 
 const fail = (error) => ({ ok: false, error });
 
-function scoreOf(universe, fromId, toId) {
-  const relationship = universe.relationships.find(
-    (r) => r.fromId === fromId && r.toId === toId,
-  );
-  return relationship ? relationship.score : 0;
-}
+// A missing relationship counts as 0.
+const scoreOf = (universe, fromId, toId) => getRelationship(universe, fromId, toId)?.score ?? 0;
 
 function cleanName(name) {
   const trimmed = typeof name === "string" ? name.trim() : "";
@@ -88,15 +85,15 @@ export function canForm(universe, memberIds) {
   if (memberIds.length < MIN_MEMBERS || memberIds.length > MAX_MEMBERS) {
     return fail(`A faction needs ${MIN_MEMBERS} to ${MAX_MEMBERS} wrestlers.`);
   }
-  const byId = new Map(universe.wrestlers.map((w) => [w.id, w]));
-  if (memberIds.some((id) => !byId.has(id))) {
+  const current = new Set(universe.wrestlers.map((w) => w.id));
+  if (memberIds.some((id) => !current.has(id))) {
     return fail("Every founder must be a wrestler on the current roster.");
   }
   for (const faction of universe.factions) {
     if (!faction.active) continue;
     const clash = memberIds.find((id) => faction.memberIds.includes(id));
     if (clash) {
-      return fail(`${byId.get(clash).name} is already in the faction "${faction.name}".`);
+      return fail(`${nameOf(universe, clash).name} is already in the faction "${faction.name}".`);
     }
   }
   for (const a of memberIds) {
@@ -105,7 +102,7 @@ export function canForm(universe, memberIds) {
       const score = scoreOf(universe, a, b);
       if (score < FORM_THRESHOLD) {
         return fail(
-          `${byId.get(a).name} must feel at least ${FORM_THRESHOLD} towards ${byId.get(b).name} (currently ${score}); every pair needs this in both directions.`,
+          `${nameOf(universe, a).name} must feel at least ${FORM_THRESHOLD} towards ${nameOf(universe, b).name} (currently ${score}); every pair needs this in both directions.`,
         );
       }
     }

@@ -10,6 +10,7 @@ import {
 import { validateSettings } from "./constants";
 import { dissolveFaction, formFaction, renameFaction } from "./factions";
 import { ensureCurrent } from "./migrate";
+import { applyDelta, RelationshipError } from "./relationships";
 import { V2_KEY, validateUniverse } from "./schema";
 import { createRng } from "./sim/rng";
 
@@ -134,6 +135,18 @@ function applyAction(universe, action) {
           [target.id]: target.name,
         },
       };
+    }
+
+    case "applyRelationshipDelta": {
+      // eslint-disable-next-line no-unused-vars
+      const { type, ...input } = action;
+
+      try {
+        return applyDelta(universe, input);
+      } catch (error) {
+        if (error instanceof RelationshipError) return universe;
+        throw error;
+      }
     }
 
     case "setNotes":

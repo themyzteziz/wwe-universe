@@ -4,11 +4,21 @@ import WeekInfo from "./components/WeekInfo";
 import MatchGenerator from "./components/MatchGenerator";
 import RosterTable from "./components/RosterTable";
 import WrestlersManager from "./components/WrestlersManager";
+import RelationshipProfile from "./components/universe/RelationshipProfile";
+import WrestlerPicker from "./components/universe/WrestlerPicker";
 import { useUniverse } from "./universe/UniverseContext.jsx";
 
 export default function App() {
   const { universe, dispatch, banners, dismissBanner } = useUniverse();
   const [page, setPage] = useState("booking");
+  const [profileId, setProfileId] = useState(null);
+
+  const selectedId = universe.wrestlers.some((w) => w.id === profileId)
+    ? profileId
+    : universe.wrestlers.reduce(
+        (first, w) => (!first || w.name.localeCompare(first.name) < 0 ? w : first),
+        null
+      )?.id;
 
   return (
     <>
@@ -46,9 +56,16 @@ export default function App() {
         >
           WRESTLERS
         </button>
+
+        <button
+          className={page === "profiles" ? "active" : ""}
+          onClick={() => setPage("profiles")}
+        >
+          PROFILES
+        </button>
       </nav>
 
-      {page === "booking" ? (
+      {page === "booking" && (
         <>
           <WeekInfo currentWeek={universe.week} dispatch={dispatch} />
 
@@ -59,12 +76,24 @@ export default function App() {
 
           <RosterTable wrestlers={universe.wrestlers} dispatch={dispatch} />
         </>
-      ) : (
-        <WrestlersManager
-          wrestlers={universe.wrestlers}
-          factions={universe.factions}
-          dispatch={dispatch}
-        />
+      )}
+
+      {page === "wrestlers" && (
+        <WrestlersManager wrestlers={universe.wrestlers} dispatch={dispatch} />
+      )}
+
+      {page === "profiles" && (
+        <div className="profiles-page">
+          {selectedId && (
+            <WrestlerPicker
+              wrestlers={universe.wrestlers}
+              value={selectedId}
+              onChange={setProfileId}
+            />
+          )}
+
+          <RelationshipProfile wrestlerId={selectedId} />
+        </div>
       )}
     </>
   );

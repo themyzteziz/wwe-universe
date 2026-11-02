@@ -4,6 +4,7 @@ import WeekInfo from "./components/WeekInfo";
 import MatchGenerator from "./components/MatchGenerator";
 import RosterTable from "./components/RosterTable";
 import WrestlersManager from "./components/WrestlersManager";
+import ProposalCard from "./components/universe/ProposalCard";
 import RelationshipProfile from "./components/universe/RelationshipProfile";
 import WrestlerPicker from "./components/universe/WrestlerPicker";
 import { useUniverse } from "./universe/UniverseContext.jsx";
@@ -82,6 +83,8 @@ export default function App() {
               readOnly ? undefined : () => dispatch({ type: "undoLastResult" })
             }
           />
+
+          <ProposalCard />
 
           <RosterTable wrestlers={universe.wrestlers} dispatch={dispatch} />
         </>

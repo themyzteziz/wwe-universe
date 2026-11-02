@@ -612,8 +612,120 @@ main {
   color: #ff7b7b;
 }
 
+.proposal-panel {
+  display: grid;
+  gap: 16px;
+  width: min(100% - 2rem, 700px);
+  margin: 24px auto;
+}
+
+.proposal-card,
+.proposal-suggestions {
+  padding: 20px;
+  background: #1b1b1b;
+  border: 2px solid #e31b23;
+  border-radius: 8px;
+}
+
+.proposal-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.proposal-card h2,
+.proposal-suggestions h3 {
+  margin: 0;
+}
+
+.proposal-tier {
+  background: #333;
+  color: #ddd;
+}
+
+.proposal-tier-uncommon {
+  background: #5a3300;
+  color: #ffa54a;
+}
+
+.proposal-tier-rare {
+  background: #4a1515;
+  color: #ff7b7b;
+}
+
+.proposal-deltas,
+.proposal-suggestions ul {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proposal-notice,
+.proposal-suggestion-note {
+  color: #bbb;
+}
+
+.proposal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.proposal-actions button {
+  padding: 10px 18px;
+  background: #e31b23;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.proposal-actions button:hover:not(:disabled) {
+  background: #b9151b;
+}
+
+.proposal-actions button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.proposal-toast {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #1b1b1b;
+  border: 1px solid #555;
+  border-radius: 6px;
+  color: #ddd;
+}
+
+.proposal-toast button {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
 @media (max-width: 600px) {
   .profile-row-button {
     flex-wrap: wrap;
+  }
+
+  .proposal-card-header,
+  .proposal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .proposal-actions button {
+    width: 100%;
   }
 }

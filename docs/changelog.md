@@ -2,4 +2,4 @@
 
 ## Changelog
 
-- 2026-11-02 — US-116 Upgrade to React 19 and set up Vitest + React Testing Library: React 19 confirmed, Vitest/RTL smoke test added, lint fixed with a flat config, and `npm run check` now runs tests too.
+- 2026-11-02 — US-113 Define versioned Universe data schema with stable wrestler IDs: added `universe/` schema v2 with stable `w_` wrestler IDs, referential validation and settings validation; replaced ESLint config with the US-116 flat config.

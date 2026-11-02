@@ -1,18 +1,31 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
+const browserAndNode = {
+  window: "readonly",
+  document: "readonly",
+  localStorage: "readonly",
+  crypto: "readonly",
+  console: "readonly",
+  alert: "readonly",
+  URL: "readonly",
+  setTimeout: "readonly",
+  clearTimeout: "readonly",
+};
+
+export default defineConfig([
+  globalIgnores(["dist/**", "node_modules/**"]),
+  {
+    files: ["**/*.{js,jsx,mjs}"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: { ecmaFeatures: { jsx: true } },
+      globals: browserAndNode,
+    },
+    rules: {
+      "no-undef": "error",
+      // Capitalised names are React components used in JSX, which core ESLint cannot see.
+      "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z]" }],
+    },
+  },
 ]);
-
-export default eslintConfig;

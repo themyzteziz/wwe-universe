@@ -93,3 +93,26 @@ Your universe is saved automatically. You do not need a save button.
 - If a wrestler has no relationships, the profile shows "No history yet". If the roster is empty, it shows "No wrestlers yet".
 - The profile is read-only. To change relationships, record the result of a match or event; the profile then reflects the change.
 - The profile content is the same after you reload the page.
+
+## How to record a match result and undo it
+
+Use this after you have played a match in WWE 2K26 and want to log the winner in the Universe.
+
+1. On the **Match Generator**, click **Generate Match** (or **Reroll**) to create a match.
+2. Play the match in WWE 2K26 and note the winner.
+3. Click **Winner** next to that wrestler's name.
+4. The panel shows **Result recorded: {name}**. The wrestler's **Wins** count goes up by 1. The Winner buttons are disabled for this match, so the same result cannot be recorded twice.
+
+**Tips**
+- Generating or rerolling a match does not record anything. Only the **Winner** button records a result.
+- Changing the week or rerolling clears the result panel. The recorded result stays in your history.
+- The **Wins** count in the roster is changed only by the result buttons and the +/− buttons. Status and champion settings are not affected.
+
+**To undo the last result**
+1. Look for **Undo last result**. It appears only when at least one result is recorded and shows the last one, for example "Week 3 1v1: John won".
+2. Click **Undo last result**. The most recent result is removed and that wrestler's **Wins** count goes down by 1 (never below 0).
+3. Click again to undo the previous result. When no results remain, the button disappears.
+
+**Warning**
+- Undo removes only the result record and the win. It does not change anything else. If a winner has been removed from the roster, the result is still removed.
+- Your results are saved with your universe and remain after you reload the page.

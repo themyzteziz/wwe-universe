@@ -2,8 +2,8 @@
 
 ## Changelog
 
-- 2026-11-02 — US-119 Relationship profile view per wrestler: PROFILES page shows allies, rivals, enemies and neutral relationships with expandable history and a separate notes block (read-only).
-- 2026-11-02 — US-118 Relationship model: scale, states and explainable history
+- 2026-11-02 — US-117 Record structured match results from booking win controls: Winner buttons store a MatchResult in the Universe store (persisted under `wwe-universe-v2`), and "Undo last result" reverts the last win.
+- 2026-11-02 — US-118 Relationship model: scale, states and explainable history (see previous entry).
 
 ## 2026-11-02 — US-118 Relationship model: scale, states and explainable history
 

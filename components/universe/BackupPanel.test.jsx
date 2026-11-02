@@ -44,6 +44,7 @@ function renderPanel() {
 }
 
 beforeEach(() => {
+  window.localStorage.clear();
   blobs = [];
   clicks = [];
   URL.createObjectURL = vi.fn((blob) => {
@@ -91,8 +92,11 @@ describe("BackupPanel", () => {
     expect(text).not.toContain("example.com");
   });
 
-  it("AC 5: exports in-memory changes that have not been saved yet", async () => {
+  it("AC 5: exports in-memory changes that failed to save", async () => {
     renderPanel();
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("quota exceeded");
+    });
     act(() => dispatchRef({ type: "addWrestler", id: "w_unsaved", name: "Unsaved Star" }));
     await userEvent.click(screen.getByRole("button", { name: "Export" }));
 

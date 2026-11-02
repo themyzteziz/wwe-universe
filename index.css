@@ -407,9 +407,11 @@ main {
 
 .main-nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   margin: 25px auto;
+  padding: 0 1rem;
 }
 
 .main-nav button {
@@ -424,6 +426,56 @@ main {
 
 .main-nav button.active {
   background: #e31b23;
+}
+
+.nav-badge {
+  display: inline-block;
+  min-width: 20px;
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #ffc107;
+  color: #000;
+  font-size: 12px;
+  text-align: center;
+}
+
+.universe-view {
+  width: min(100% - 2rem, 900px);
+  margin: 25px auto;
+}
+
+.universe-subtabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.universe-subtabs button {
+  padding: 8px 18px;
+  border: 1px solid #e31b23;
+  border-radius: 6px;
+  background: #1b1b1b;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.universe-subtabs button.active {
+  background: #e31b23;
+}
+
+.universe-panel {
+  padding: 20px;
+  background: #1b1b1b;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.universe-placeholder {
+  margin: 0;
+  color: #aaa;
 }
 
 .wrestlers-manager {
@@ -610,6 +662,100 @@ main {
 .badge-enemy {
   background: #4a1515;
   color: #ff7b7b;
+}
+
+.timeline-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.timeline-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #aaa;
+}
+
+.timeline-filters label.timeline-checkbox {
+  flex-direction: row;
+  align-items: center;
+}
+
+.timeline-filters input[type="number"],
+.timeline-filters select {
+  padding: 8px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #111;
+  color: white;
+}
+
+.timeline-filters input[type="number"] {
+  width: 90px;
+}
+
+.timeline-filters button,
+.timeline-pager button {
+  padding: 8px 14px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: #2d2d2d;
+  color: white;
+  cursor: pointer;
+}
+
+.timeline-pager button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.timeline-error {
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.timeline-empty {
+  margin: 0;
+  color: #aaa;
+}
+
+.timeline-list {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline-entry {
+  padding: 10px 12px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background: #111;
+}
+
+.timeline-entry.dimmed {
+  opacity: 0.5;
+}
+
+.timeline-week {
+  font-weight: 800;
+}
+
+.timeline-rejected {
+  color: #ff7b7b;
+  font-weight: bold;
+}
+
+.timeline-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #bbb;
 }
 
 @media (max-width: 600px) {

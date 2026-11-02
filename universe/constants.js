@@ -6,6 +6,17 @@ export const ENEMY_MAX = -60;
 export const RIVAL_MAX = -20;
 export const ALLY_MIN = 20;
 
+/**
+ * @param {number} score integer -100..100
+ * @returns {'enemy'|'rival'|'neutral'|'ally'}
+ */
+export function stateOf(score) {
+  if (score <= ENEMY_MAX) return "enemy";
+  if (score <= RIVAL_MAX) return "rival";
+  if (score >= ALLY_MIN) return "ally";
+  return "neutral";
+}
+
 export const STATUSES = ["available", "title-shot", "used"];
 
 export const EVENT_TYPE_NAMES = [

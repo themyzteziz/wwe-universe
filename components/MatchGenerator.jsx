@@ -113,7 +113,7 @@ export default function MatchGenerator({
                 (wrestler, index) => (
                   <div
                     className="generated-wrestler"
-                    key={wrestler.name}
+                    key={wrestler.id}
                   >
                     {wrestler.name}
 

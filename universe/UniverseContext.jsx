@@ -143,6 +143,13 @@ function applyAction(universe, action) {
       }
     }
 
+    // Partial settings; an invalid result (e.g. a non-https aiEndpoint) is refused whole.
+    case "updateSettings": {
+      const result = validateSettings({ ...universe.settings, ...action.settings });
+
+      return result.ok ? { ...universe, settings: result.value } : universe;
+    }
+
     case "setNotes":
       return updateWrestler(universe, action.id, () => ({
         notes: String(action.notes ?? ""),
@@ -218,13 +225,16 @@ export function reducer(state, action) {
       };
 
     case "replaceUniverse": {
+      // validateUniverse also refuses a non-https aiEndpoint.
       if (!action.universe || validateUniverse(action.universe).length > 0) {
         return state;
       }
 
+      // An import never carries AI settings: the player re-enables them by hand.
       const settings = {
         ...validateSettings(action.universe.settings).value,
         aiEnabled: false,
+        aiEndpoint: "",
       };
 
       return {

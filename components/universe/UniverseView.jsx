@@ -1,7 +1,15 @@
 import { useState } from "react";
+import SettingsPanel from "./SettingsPanel.jsx";
 import Timeline from "./Timeline.jsx";
 
 export const SUB_TABS = ["Timeline", "Relationships", "Settings", "Backup"];
+
+function Panel({ name }) {
+  if (name === "Timeline") return <Timeline />;
+  if (name === "Settings") return <SettingsPanel />;
+
+  return <p className="universe-placeholder">{name} is coming soon.</p>;
+}
 
 export default function UniverseView() {
   const [subTab, setSubTab] = useState("Timeline");
@@ -31,11 +39,7 @@ export default function UniverseView() {
         role="tabpanel"
         aria-labelledby={`universe-tab-${subTab}`}
       >
-        {subTab === "Timeline" ? (
-          <Timeline />
-        ) : (
-          <p className="universe-placeholder">{subTab} is coming soon.</p>
-        )}
+        <Panel name={subTab} />
       </div>
     </section>
   );

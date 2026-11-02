@@ -169,3 +169,29 @@ Match results record who fought, who won and in which week. They are stored in t
 **Future:** events linked to an undone result are kept and flagged `sourceUndone` (planned with US-128, which also adds the automatic event roll after each recorded result).
 
 **Release step:** `dist/` must be untracked from git (`git rm -r --cached dist`) before release. `/dist` is already in `.gitignore`.
+
+## UNIVERSE view shell (US-131)
+
+- `App.jsx` adds a third top-level tab, UNIVERSE, using the existing tab mechanism. The pending badge (`.nav-badge`, `aria-label="pending proposals"`) counts `useUniverse().universe.events` where `state === 'proposed'`; it is hidden at zero.
+- `components/universe/UniverseView.jsx` is a sub-tab shell with local `useState` (`subTab`: `Timeline | Relationships | Settings | Backup`, default Timeline). Nothing is persisted. Panels are placeholders until US-132/US-133/US-134 land.
+- Must be rendered inside `UniverseProvider` (US-115). No direct localStorage access.
+- `index.css`: `.main-nav` and `.universe-subtabs` use `flex-wrap`; `.universe-*` styles reuse the dark red theme variables.
+- Tests: `components/universe/UniverseView.test.jsx` (RTL, AC 1–3). AC 4 is a manual check at 360px.
+- Deployment: `dist/` must be removed from Git tracking (`git rm -r --cached dist`) so CI builds fresh assets.
+
+## Universe timeline (US-132)
+
+**Module:** `universe/selectors.js` — `timelineEntries(state, filters)` (pure).
+
+- Input filters: `order` (`'desc'` default, or `'asc'`), `weekFrom`, `weekTo` (inclusive), `wrestlerId`, `eventType`, `states` (Set), `showRejected` (default `false`).
+- Entries: `{kind: 'match' | 'event', id, week, createdAt, participantIds, type, state?, description, dimmed}`.
+- Match entries come from `matchResults` (`createdAt` = `recordedAt`, description "A def. B", unknown ids resolve to "Unknown wrestler").
+- Event entries come from `events` with state `accepted`; `rejected` only when `showRejected` is set (then `dimmed = true`). `proposed` events are never shown here.
+- `eventType` hides match entries. `wrestlerId` matches `participantIds`.
+- Sort: week, then `createdAt`, then `id`; `asc` reverses.
+
+**Component:** `components/universe/Timeline.jsx` — filter bar, list and pager (50 per page). The selector is memoised with `useMemo`; the page resets to 1 on any filter change. Rendered by the Timeline sub-tab in `components/universe/UniverseView.jsx`.
+
+**Styling:** `index.css` — dimmed entries use the `opacity` class and a "Rejected" text label.
+
+**Data:** Read-only. No schema change; the timeline is derived from the universe document.

@@ -9,6 +9,7 @@ import {
 } from "react";
 import { validateSettings } from "./constants";
 import { dissolveFaction, formFaction, renameFaction } from "./factions";
+import { recordResult, undoLastResult } from "./matchResults";
 import { ensureCurrent } from "./migrate";
 import { applyDelta, RelationshipError } from "./relationships";
 import { V2_KEY, validateUniverse } from "./schema";
@@ -200,6 +201,13 @@ function applyAction(universe, action) {
         universe,
         renameFaction(universe, action.factionId, action.name)
       );
+
+    // `result` is nested because a match `type` would clash with the action `type`.
+    case "recordResult":
+      return recordResult(universe, action.result ?? {});
+
+    case "undoLastResult":
+      return undoLastResult(universe);
 
     default:
       return universe;

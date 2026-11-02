@@ -4,6 +4,7 @@ import WeekInfo from "./components/WeekInfo";
 import MatchGenerator from "./components/MatchGenerator";
 import RosterTable from "./components/RosterTable";
 import WrestlersManager from "./components/WrestlersManager";
+import BackupPanel from "./components/universe/BackupPanel";
 import { useUniverse } from "./universe/UniverseContext.jsx";
 
 export default function App() {
@@ -60,7 +61,11 @@ export default function App() {
           <RosterTable wrestlers={universe.wrestlers} dispatch={dispatch} />
         </>
       ) : (
-        <WrestlersManager wrestlers={universe.wrestlers} dispatch={dispatch} />
+        <>
+          <WrestlersManager wrestlers={universe.wrestlers} dispatch={dispatch} />
+
+          <BackupPanel />
+        </>
       )}
     </>
   );

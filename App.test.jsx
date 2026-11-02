@@ -1,10 +1,23 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
+import { UniverseProvider } from "./universe/UniverseContext";
+
+function renderApp() {
+  return render(
+    <UniverseProvider>
+      <App />
+    </UniverseProvider>
+  );
+}
 
 describe("App smoke test", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   it("renders the navigation and the Match Generator heading", () => {
-    render(<App />);
+    renderApp();
 
     expect(
       screen.getByRole("button", { name: "BOOKING" })
@@ -18,7 +31,7 @@ describe("App smoke test", () => {
   });
 
   it("replaces the booking content when WRESTLERS is selected", async () => {
-    render(<App />);
+    renderApp();
 
     await userEvent.click(
       screen.getByRole("button", { name: "WRESTLERS" })

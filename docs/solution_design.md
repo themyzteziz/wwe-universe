@@ -124,3 +124,63 @@ None required. Optional AI description hook only (template text default; no back
 **Risks**
 - Frequency 0 must be honoured by the engine/trigger (FT-109/110) — covered by a trigger-level test (low likelihood, medium impact).
 - Relationships/Backup sub-tabs depend on other stories; shell uses placeholders until available (low).
+
+## FT-109 — Simulation engine core (US-122…US-127)
+
+**Modules** (new folder `universe/sim/`, pure JS, state-in/state-out, no I/O, tests co-located):
+| Path | Role | Story |
+|---|---|---|
+| `rng.js` | mulberry32 `createRng`, `deriveSeed`, `defaultSeed` | US-122 |
+| `config.js` | `TIERS`, `EVENT_TYPES` (incl. roles, relationRule, deltas), `DEFAULT_SETTINGS`, `RIVAL_TYPES`/`RESOLVE_TYPES`, `validateConfig` | US-123, US-126 |
+| `eligibility.js` | `getEligibleCandidates`, `isOnCooldown` | US-124 |
+| `select.js` | `selectEvent`, `computeWeights` | US-125 |
+| `consequences.js` | `buildProposal`, `addProposal`, `applyEvent`, `rejectEvent`, `EventStateError` | US-126 |
+| `describe.js` | templates + `describeEvent` | US-127 |
+| `engine.js` | `proposeEvent` (roll → select → build → describe), reroll via seed | US-127 |
+
+**Pipeline**: `proposeEvent` creates `rng(seed)`; frequency roll → weighted pick (`p = (1−chaos)·tier·(1+s·history) normalised + chaos/n`) → deltas with chaos jitter (≤ ±25%) → description from sub-stream `deriveSeed(seed,0)`. Reroll seed = `deriveSeed(prevSeed, attempt≥1)`. Same state+settings+seed ⇒ same event (excluding `id`, `createdAt`). `Math.random` is forbidden in `universe/sim` (grep test).
+
+**Data model additions** (optional fields, schemaVersion stays 2): Event deltas element `{fromId,toId,delta,applied,scoreBefore,scoreAfter,beforeState,afterState}`; Event `+payload?{factionName}`. Proposed events are stored in `events` (counted for cooldowns). `DEFAULT_SETTINGS` lives in `sim/config.js`; `schema.js` imports it (settings `seed` stays separate).
+
+**Rules**: candidates are role-ordered `participantIds`; stale preview (score ≠ `scoreBefore`) makes `applyEvent` throw; faction acceptance is all-or-nothing; `return` is catalogued but never generated in v1 (no inactive status); ambush/save/etc. relation rules in US-123. Accepted events: relationships via `applyDelta`, storyline via `attachEvent`, faction via `formFaction`. Wins/champion/status/title-shot are never written; title-shot *suggestions* (PO answer, confirmation required) are a later story, reserved as optional Event `suggestions[]`, ignored by `applyEvent`.
+
+**Decisions**
+| Decision | Reason | Alternatives |
+|---|---|---|
+| `universe/sim/` not `src/sim/` | repo has no `src/` | follow story paths literally |
+| Merge templates into `describe.js`; add small `engine.js` | fewer files; replay needs one orchestrator | separate templates file; orchestration in UI |
+| Chaos blends probabilities (lerp to uniform) | simple, testable, monotone for rare share | tier-weight exponent |
+| Description on separate RNG sub-stream | text changes never alter deltas/replay | shared stream |
+| Rejected events count half in cooldowns; pending proposals count fully | per story assumption; prevents duplicates | ignore rejected |
+| Pair cooldown = 2× type cooldown | assumption, tunable in config | separate tuning |
+| FT-108 type sets read from `sim/config.js` | single source for catalogue | duplicate constants |
+
+**Risks**
+| Risk | L/I | Mitigation |
+|---|---|---|
+| FT-107/FT-108 function signatures differ from assumed | Med/Med | Developer confirms signatures first; wrap in `consequences.js` only |
+| Candidate explosion on large rosters | Low/Med | cap 200, stable order |
+| Statistical tests flaky | Low/Low | fixed seed sweeps (deterministic) |
+| Probability tuning feels off | Med/Low | all weights/frequencies in `config.js` |
+
+## FT-112 — Backup, optional AI text and release quality (US-134…US-138)
+
+**Modules**: `src/universe/exportImport.js` (serialize, parseImport, applyImport) · `src/components/universe/BackupPanel.jsx` · `src/sim/aiProvider.js` · `src/components/ErrorBoundary.jsx` · `src/components/Banner.jsx` · CI workflow test step.
+
+**Data model**: no new entities. UniverseSettings gains `aiEnabled:boolean=false`, `aiEndpoint:string=""`. Export adds metadata `exportedAt` (ISO), stripped on import. Extra localStorage key `wwe-universe-v2.pre-import` (single slot, raw string of the replaced universe).
+
+**API (internal)**: `serializeUniverse(u, now) -> {filename,text}`; `parseImport(text) -> {universe}|{errors[]}`; `enhanceDescription(event, facts, settings, fetchImpl) -> {text, usedAi, notice?}`; provider `replaceUniverse`, `pushBanner/dismissBanner`.
+
+**Integration**: optional user-supplied HTTPS endpoint, POST `{type, participants[names], facts[]}` → `{text}`; 10 s AbortController timeout; `credentials:'omit'`; any failure falls back to template; text never touches deltas.
+
+**Security**: import file is untrusted (size cap 5 MB, full validation before any write, React-escaped rendering); no API key fields; https-only endpoint; error boundary never writes/deletes storage.
+
+**Decisions**
+- Import = replace with confirmation + pre-import snapshot · protects data, simple · merge import (out of scope) · no restore UI in v1.
+- Collect all validation errors, not first-only · actionable for the player · fail-fast.
+- Legacy roster accepted through the existing migration chain · reuses code.
+- One shared Banner via provider state · single pattern for notices · per-component alerts.
+- Boundary export reads raw localStorage · works even if state is corrupt.
+- CI: add test step to the existing job only · keeps deploy behaviour intact.
+
+**Risks**: quota failure on pre-import write (abort import, medium/low); CORS rejection by user endpoint (falls back, notice); layout cannot be proven in jsdom (manual 360 px check); workflow content not inspected by architect (developer diffs); `base` misconfiguration breaks Pages assets (verify dist/index.html).

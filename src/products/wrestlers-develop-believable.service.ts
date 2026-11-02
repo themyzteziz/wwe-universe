@@ -13,7 +13,9 @@ export class ValidationError extends Error {
 }
 
 export function validateProduct(input: ProductInput) {
-  // TODO: validation
+  const title = input.title?.trim() ?? "";
+  if (!title) throw new ValidationError("title", "Title is required.");
+  if (title.length > 120) throw new ValidationError("title", "Title can be at most 120 characters.");
 }
 
 export async function createProduct(input: ProductInput) {

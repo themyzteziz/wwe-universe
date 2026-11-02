@@ -116,3 +116,13 @@ Use this after you have played a match in WWE 2K26 and want to log the winner in
 **Warning**
 - Undo removes only the result record and the win. It does not change anything else. If a winner has been removed from the roster, the result is still removed.
 - Your results are saved with your universe and remain after you reload the page.
+
+## How to open the UNIVERSE view
+
+1. Click the **UNIVERSE** tab in the top navigation, next to **BOOKING** and **WRESTLERS**.
+2. Choose a sub-tab: **Timeline**, **Relationships**, **Settings** or **Backup**. **Timeline** opens by default.
+3. Sub-tab content is shown as "coming soon" until the panels are delivered.
+
+**Tip:** A number badge on the **UNIVERSE** tab shows how many event proposals are waiting for your review. The badge disappears when there are none.
+
+**Tip:** On narrow screens the tabs wrap onto several lines instead of scrolling the page sideways.

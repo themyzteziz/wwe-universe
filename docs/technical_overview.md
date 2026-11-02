@@ -129,34 +129,17 @@ Source: US-115.
 
 ## Relationship model
 
-Module: `universe/relationships.js` (pure functions, no React). Constants and `stateOf` live in `universe/constants.js`; `relationships.js` re-exports `stateOf`. `schema.js` imports from `constants.js` only, so there is no import cycle.
+Relationship model (US-118) is consumed by the profile view (US-119).
 
-**Data model**
-
-| Field | Type | Notes |
-|---|---|---|
-| fromId | string | Wrestler id (`wrestlers` or `formerWrestlers`) |
-| toId | string | Wrestler id; must differ from fromId |
-| score | integer | −100..100, clamped |
-| state | string | `enemy` (≤ −60), `rival` (−59..−20), `neutral` (−19..19), `ally` (≥ 20) |
-| history | array | HistoryEntry[] |
-
-Lookup key: `${fromId}>${toId}`. Each ordered pair is unique. A→B and B→A are stored separately.
-
-HistoryEntry: `{id, eventId?, matchId?, week:int, delta:int, scoreAfter:int, participantIds:string[], reason:string}`. `delta` is the requested change; `scoreAfter` is the clamped result.
-
-**API**
-
-| Function | Behaviour |
+### Relationship profile view (US-119)
+| Module | Role |
 |---|---|
-| `stateOf(score)` | Maps a score to a state (see above) |
-| `applyDelta(universe, {fromId, toId, delta, mutual, source})` | Returns a new universe. Throws `RelationshipError` for self-pair, unknown or former wrestler, non-integer delta, empty reason, non-integer week. Delta 0 returns the universe unchanged. |
-| `getRelationship(universe, fromId, toId)` | Relationship or `undefined` |
-| `listFor(universe, id)` | Outgoing relationships, including those with former counterparts |
-| `nameOf(universe, id)` | `{name, former}`; `{name: 'Unknown wrestler', former: true}` if the id is unknown |
+| `components/universe/RelationshipProfile.jsx` | Renders one wrestler's profile from `useUniverse()`. Uses `listFor` and `nameOf` from `universe/relationships.js`. Groups by `state`, sorts by `Math.abs(score)` descending (ties by name ascending), and keeps open rows in local state. Inline `StateBadge`. |
+| `components/universe/WrestlerPicker.jsx` | Native `<select>` labelled "Wrestler", values are wrestler ids, sorted by name. Selection is held by the parent. |
+| `App.jsx` | Temporary PROFILES page. Selection falls back to the first wrestler by name, or to the empty state. To be moved into the UNIVERSE shell. |
+| `index.css` | `.badge`, `.badge-ally` (green), `.badge-neutral` (grey), `.badge-rival` (orange), `.badge-enemy` (red). Colours match the existing status classes. |
 
-**Reducer:** `applyRelationshipDelta` in `UniverseContext.jsx` calls `applyDelta`. Invalid input leaves state unchanged.
-
-**Validation:** `validateUniverse` rejects scores outside −100..100 or non-integer, self-pairs, states that disagree with the score, and duplicate ordered pairs. Referential checks for former wrestlers belong to the universe validation in US-113.
-
-**Persistence:** relationships are saved with the universe. No migration; no schema version change.
+- The view is read-only and has no data migration.
+- Counterpart names come from `nameOf(universe, toId)`. Removed counterparts get the "(former)" suffix.
+- `eventId` is shown as plain text "Event {id}" until a timeline exists.
+- Tests: `components/universe/RelationshipProfile.test.jsx` (React Testing Library, fixture universe via `UniverseContext`).

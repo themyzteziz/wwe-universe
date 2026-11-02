@@ -169,3 +169,12 @@ Match results record who fought, who won and in which week. They are stored in t
 **Future:** events linked to an undone result are kept and flagged `sourceUndone` (planned with US-128, which also adds the automatic event roll after each recorded result).
 
 **Release step:** `dist/` must be untracked from git (`git rm -r --cached dist`) before release. `/dist` is already in `.gitignore`.
+
+## UNIVERSE view shell (US-131)
+
+- `App.jsx` adds a third top-level tab, UNIVERSE, using the existing tab mechanism. The pending badge (`.nav-badge`, `aria-label="pending proposals"`) counts `useUniverse().universe.events` where `state === 'proposed'`; it is hidden at zero.
+- `components/universe/UniverseView.jsx` is a sub-tab shell with local `useState` (`subTab`: `Timeline | Relationships | Settings | Backup`, default Timeline). Nothing is persisted. Panels are placeholders until US-132/US-133/US-134 land.
+- Must be rendered inside `UniverseProvider` (US-115). No direct localStorage access.
+- `index.css`: `.main-nav` and `.universe-subtabs` use `flex-wrap`; `.universe-*` styles reuse the dark red theme variables.
+- Tests: `components/universe/UniverseView.test.jsx` (RTL, AC 1–3). AC 4 is a manual check at 360px.
+- Deployment: `dist/` must be removed from Git tracking (`git rm -r --cached dist`) so CI builds fresh assets.

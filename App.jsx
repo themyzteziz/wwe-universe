@@ -4,6 +4,7 @@ import WeekInfo from "./components/WeekInfo";
 import MatchGenerator from "./components/MatchGenerator";
 import RosterTable from "./components/RosterTable";
 import WrestlersManager from "./components/WrestlersManager";
+import UniverseView from "./components/universe/UniverseView";
 import RelationshipProfile from "./components/universe/RelationshipProfile";
 import WrestlerPicker from "./components/universe/WrestlerPicker";
 import { useUniverse } from "./universe/UniverseContext.jsx";
@@ -12,6 +13,9 @@ export default function App() {
   const { universe, dispatch, readOnly, banners, dismissBanner } = useUniverse();
   const [page, setPage] = useState("booking");
   const [profileId, setProfileId] = useState(null);
+  const pending = universe.events.filter(
+    (event) => event.state === "proposed"
+  ).length;
 
   const selectedId = universe.wrestlers.some((w) => w.id === profileId)
     ? profileId
@@ -63,6 +67,18 @@ export default function App() {
         >
           PROFILES
         </button>
+
+        <button
+          className={page === "universe" ? "active" : ""}
+          onClick={() => setPage("universe")}
+        >
+          UNIVERSE
+          {pending > 0 && (
+            <span className="nav-badge" aria-label="pending proposals">
+              {pending}
+            </span>
+          )}
+        </button>
       </nav>
 
       {page === "booking" && (
@@ -104,6 +120,8 @@ export default function App() {
           <RelationshipProfile wrestlerId={selectedId} />
         </div>
       )}
+
+      {page === "universe" && <UniverseView />}
     </>
   );
 }

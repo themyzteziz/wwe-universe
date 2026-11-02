@@ -407,9 +407,11 @@ main {
 
 .main-nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
   margin: 25px auto;
+  padding: 0 1rem;
 }
 
 .main-nav button {
@@ -424,6 +426,56 @@ main {
 
 .main-nav button.active {
   background: #e31b23;
+}
+
+.nav-badge {
+  display: inline-block;
+  min-width: 20px;
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #ffc107;
+  color: #000;
+  font-size: 12px;
+  text-align: center;
+}
+
+.universe-view {
+  width: min(100% - 2rem, 900px);
+  margin: 25px auto;
+}
+
+.universe-subtabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.universe-subtabs button {
+  padding: 8px 18px;
+  border: 1px solid #e31b23;
+  border-radius: 6px;
+  background: #1b1b1b;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.universe-subtabs button.active {
+  background: #e31b23;
+}
+
+.universe-panel {
+  padding: 20px;
+  background: #1b1b1b;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.universe-placeholder {
+  margin: 0;
+  color: #aaa;
 }
 
 .wrestlers-manager {

@@ -85,3 +85,21 @@ None required. Optional AI description hook only (template text default; no back
 **Decisions:** name word list = exported constants in `factions.js` (no settings UI; · simplest, "configurable" by editing; alt: settings field). Event type sets `RIVAL_TYPES`/`RESOLVE_TYPES` are constants to be aligned with the engine's event catalogue (assumption, open dependency). Randomness only via injected seeded rng.
 
 **Risk:** event type names not fixed yet (Med/Low) → single constants, one place to change.
+
+## FT-110 Event proposal flow (US-128, US-129, US-130)
+
+**Modules:** `universe/proposals.js` (pure orchestration: `rollProposal`, `canPropose`, `latestResult`; uses selection, consequence and description modules of FT-109), reducer actions `proposeEvent`, `acceptEvent`, `rejectEvent`, `rerollEvent` and `recordResult` auto-trigger in `UniverseContext.jsx`; `components/universe/ProposalCard.jsx` (mounted in BOOKING and UNIVERSE); tests `universe/proposals.test.js`, `components/universe/ProposalCard.test.jsx`, `test/acceptance.test.jsx`, `test/fixtures/legacyRoster.json`. Root paths, no `src/`.
+
+**Data:** no schema bump. The pending proposal is the single event with `state==='proposed'` (invariant enforced by `validateUniverse`); no `pendingEventId` stored. Optional Event field `suggestion {wrestlerId,status:'title-shot'}` and `tier`. Transient (unsaved) `lastRoll` for the "No event this time" toast.
+
+**Flow:** record result → (autoPropose) roll → none | one proposed event → Accept (apply deltas with `eventId` history, attach storyline, faction change, state accepted) / Reject (state rejected, no effect) / Reroll (forced roll, excludes type+pair, replaces proposal, unlogged). Seed = hash(settings.seed, matchResult.id, rerollCount); no wall-clock in logic.
+
+**Decisions**
+| Decision | Reason | Alternatives |
+|---|---|---|
+| Pending derived from events, not stored id | One source of truth, persists automatically | Separate `pendingEventId` (can desync) |
+| Reroll replaces, does not log | PO flow: only Reject is a decision; keeps cooldown data clean | Log rerolls as rejected |
+| Title-shot suggestions need a separate confirm button, Accept never changes status | PO answer: explicit confirmation always | Apply on Accept |
+| Acceptance tests in RTL/Vitest, headless loop via reducer | No Playwright (out of scope) | Browser tests |
+
+**Risks:** engine signatures from FT-109 not final (Med/Med) → `proposals.js` is the only adapter; cooldown constant name to align; two proposals via double click/StrictMode (Low/Med) → reducer guard via `canPropose`.

@@ -67,3 +67,14 @@ You can stable wrestler IDs to be independent of wrestler names to support renam
 
 - AC 1: Stable wrestler IDs are independent of wrestler
 - AC 2: Invalid input is rejected
+
+## Keep the app functional without paid AI APIs
+You can keep the app functional without paid AI APIs; AI text generation to be optional, with clear handling of missing keys and costs, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: Keep the app functional without paid AI APIs
+- AC 2: Invalid input is rejected

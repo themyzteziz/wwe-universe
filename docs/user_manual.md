@@ -2,7 +2,9 @@
 
 ## Table of contents
 
-No end-user chapters yet. US-113 is a internal data-model change with no user-visible behaviour, so the manual is unchanged.
+1. Event types and rarity
+2. How to save and reload your universe
+3. Upgrading from the previous version
 
 ## Event types and rarity
 
@@ -45,3 +47,20 @@ Tips:
 Warnings:
 - If the saved roster data is damaged, the app starts with an empty roster and shows a notice. Your original data is kept in the backup and is not lost.
 - If a newer version of the app has already saved your data, the app does not overwrite it. It shows a notice and does not save changes until the data is fixed.
+
+## How to save and reload your universe
+
+Your universe is saved automatically. You do not need a save button.
+
+1. Make a change, for example add a wrestler or change a win count.
+2. Wait a moment. The change is saved about 0.3 seconds after your last edit.
+3. Refresh the page. Your wrestlers, notes, wins, statuses, champion flags and current week are still there.
+
+**Tips**
+- Close or refresh the page only after a short pause, or simply wait a second before leaving. The app also saves when you leave the page.
+- Your universe is stored in this browser only. Another browser or another tab does not see your changes. If you edit in two tabs at once, the last change written wins.
+
+**Warnings**
+- **"Changes may not be saved"** (yellow banner): the browser could not store your data, for example because storage is full or disabled. The app keeps working, but changes after this point are only kept until you close the page. Free browser storage or enable site storage, then reload.
+- **Read-only warning**: the saved universe could not be read, for example because it was damaged or made by a newer version of the app. Nothing is written over it, so your saved data is protected. Check the banner for the next step before you make further changes.
+- **Migration notice** (dismissible banner): shown once when an older saved universe was upgraded. You can close it.

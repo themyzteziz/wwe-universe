@@ -97,3 +97,32 @@ Rules:
 - Only version 1 → 2 is handled.
 - Volumes: a few hundred entries at most. The migration is synchronous at startup.
 - Integration: the app's `useEffect` writes to legacy keys and the call to `ensureCurrent` are wired in US-115.
+
+## Universe store and persistence
+
+Source: US-115.
+
+**Module:** `universe/UniverseContext.jsx`
+- `UniverseProvider` (in `main.jsx`, wrapping `App`) holds state with a lazy `useReducer(reducer, null, () => loadUniverse(localStorage))`.
+- `useUniverse()` returns `{universe, dispatch, notice, saveError, readOnly, banners, pushBanner, dismissBanner, flushSave, dismissNotice}`.
+- Reducer actions (camelCase, ID-based): `addWrestler {name, id}`, `removeWrestler {id}`, `setNotes {id, notes}`, `changeWins {id, amount}`, `cycleStatus {id}`, `toggleChampion {id}`, `setWeek {week}`, `replaceUniverse {universe, confirmed}`.
+- `addWrestler` trims and uppercases the name; a case-insensitive duplicate is ignored. The caller injects `id` (`newId('w')`) so the reducer stays pure. New wrestlers start with `wins 0`, `status 'available'`, `champion false`, `notes ''`.
+- `removeWrestler` writes the tombstone `formerWrestlers[id] = name` and keeps relationships and event references.
+- `changeWins` clamps at 0. `cycleStatus` follows `available → title-shot → used → available`.
+- `replaceUniverse` validates with `validateUniverse`, sanitises settings with `validateSettings` (AI forced off), is the only action allowed in read-only mode, and clears read-only when `confirmed` is true. All other actions are no-ops while read-only.
+
+**Persistence**
+- Key: `wwe-universe-v2` (`V2_KEY`).
+- `saveUniverse(storage, universe)` returns `{ok, error?}` and wraps `setItem` in try/catch.
+- `loadUniverse(storage)` is a thin wrapper over `ensureCurrent(storage)` in `universe/migrate.js` (US-114), which returns `{universe, notice?, readOnly?}`.
+- Autosave: `useEffect` on `universe`. If `readOnly`, nothing is saved. Otherwise a `setTimeout` of 300 ms saves; the timer is cleared on change. Cleanup and `window` `pagehide` call the flush. The first render does not save.
+- `saveError` is set when `saveUniverse` returns `{ok:false}` and cleared on the next success.
+- `flushSave()` lets import force a save before taking a snapshot.
+
+**Banners**
+- `banners[]`, `pushBanner`, `dismissBanner` live in the provider. Warnings use `role="alert"`. Styles are in `.banner` in `index.css`.
+- Used for the migration notice, the storage-error warning and the read-only warning.
+
+**Known limitations**
+- No multi-tab sync (last write wins).
+- Views (`RosterTable`, `WrestlersManager`, `WeekInfo`, `MatchGenerator`) dispatch actions keyed by wrestler `id`; React `key` is `id`.

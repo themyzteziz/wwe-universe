@@ -64,3 +64,32 @@ Your universe is saved automatically. You do not need a save button.
 - **"Changes may not be saved"** (yellow banner): the browser could not store your data, for example because storage is full or disabled. The app keeps working, but changes after this point are only kept until you close the page. Free browser storage or enable site storage, then reload.
 - **Read-only warning**: the saved universe could not be read, for example because it was damaged or made by a newer version of the app. Nothing is written over it, so your saved data is protected. Check the banner for the next step before you make further changes.
 - **Migration notice** (dismissible banner): shown once when an older saved universe was upgraded. You can close it.
+
+## Wrestler relationship profiles
+
+## How to view a wrestler's relationships
+
+1. Open the **PROFILES** page from the main navigation.
+2. In the **Wrestler** list, select a wrestler. If the roster has wrestlers, the first one by name is shown by default.
+3. The profile shows up to four sections, in this order:
+   - **Allies**
+   - **Rivals**
+   - **Enemies**
+   - **Neutral** (only relationships that have history, even if the score is now 0)
+
+   Empty sections are hidden. Within each section, the strongest relationship (largest absolute score) is listed first. Each row shows the counterpart's name, score and a state badge (Ally, Rival, Enemy or Neutral).
+4. To see why a relationship changed, click a row. Its history expands, oldest entry first. Each entry shows:
+   - the week,
+   - the change in score (with a + or − sign),
+   - the reason,
+   - the linked event or match, when there is one.
+5. Click the row again to collapse it.
+
+**Notes**
+- The wrestler's notes appear in a separate **Notes** block. They are never mixed into the relationship history.
+- Former counterparts (wrestlers removed from the roster) are shown with their last name followed by "(former)".
+
+**Tips**
+- If a wrestler has no relationships, the profile shows "No history yet". If the roster is empty, it shows "No wrestlers yet".
+- The profile is read-only. To change relationships, record the result of a match or event; the profile then reflects the change.
+- The profile content is the same after you reload the page.

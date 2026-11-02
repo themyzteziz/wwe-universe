@@ -9,6 +9,7 @@ import {
 } from "react";
 import { validateSettings } from "./constants";
 import { ensureCurrent } from "./migrate";
+import { applyDelta, RelationshipError } from "./relationships";
 import { V2_KEY, validateUniverse } from "./schema";
 
 export const SAVE_DELAY_MS = 300;
@@ -127,6 +128,18 @@ function applyAction(universe, action) {
           [target.id]: target.name,
         },
       };
+    }
+
+    case "applyRelationshipDelta": {
+      // eslint-disable-next-line no-unused-vars
+      const { type, ...input } = action;
+
+      try {
+        return applyDelta(universe, input);
+      } catch (error) {
+        if (error instanceof RelationshipError) return universe;
+        throw error;
+      }
     }
 
     case "setNotes":

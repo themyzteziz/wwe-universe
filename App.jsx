@@ -60,7 +60,11 @@ export default function App() {
           <RosterTable wrestlers={universe.wrestlers} dispatch={dispatch} />
         </>
       ) : (
-        <WrestlersManager wrestlers={universe.wrestlers} dispatch={dispatch} />
+        <WrestlersManager
+          wrestlers={universe.wrestlers}
+          factions={universe.factions}
+          dispatch={dispatch}
+        />
       )}
     </>
   );

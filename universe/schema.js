@@ -43,10 +43,13 @@ import { DEFAULT_SETTINGS, validateSettings } from "./constants.js";
  *
  * @typedef {Object} Faction
  * @property {string} id            "f_..."
- * @property {string} name
- * @property {string[]} memberIds
+ * @property {string} name          1-40 characters, renamable
+ * @property {string[]} memberIds   2-5 unique wrestler ids (may later refer to removed wrestlers)
  * @property {string} formedEventId
- * @property {boolean} active
+ * @property {number} [formedWeek]
+ * @property {boolean} active       false once dissolved; dissolved factions are kept as history
+ * @property {number} [dissolvedWeek]
+ * @property {string} [dissolvedEventId]
  *
  * @typedef {Object} Storyline
  * @property {string} id            "s_..."
@@ -178,7 +181,17 @@ export function validateUniverse(obj) {
     checkIds(`Match result ${i + 1} participantIds`, m.participantIds);
     checkIds(`Match result ${i + 1} winnerIds`, m.winnerIds);
   });
-  list("factions").forEach((f, i) => checkIds(`Faction ${i + 1} memberIds`, f.memberIds));
+  list("factions").forEach((f, i) => {
+    checkIds(`Faction ${i + 1} memberIds`, f.memberIds);
+    for (const key of ["formedWeek", "dissolvedWeek"]) {
+      if (f[key] !== undefined && !(Number.isInteger(f[key]) && f[key] >= 1)) {
+        errors.push(`Faction ${i + 1} ${key} must be a whole number of 1 or more.`);
+      }
+    }
+    if (f.dissolvedEventId !== undefined && typeof f.dissolvedEventId !== "string") {
+      errors.push(`Faction ${i + 1} dissolvedEventId must be text.`);
+    }
+  });
   list("storylines").forEach((s, i) =>
     checkIds(`Storyline ${i + 1} participantIds`, s.participantIds),
   );

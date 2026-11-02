@@ -8,8 +8,10 @@ import {
   useRef,
 } from "react";
 import { validateSettings } from "./constants";
+import { dissolveFaction, formFaction, renameFaction } from "./factions";
 import { ensureCurrent } from "./migrate";
 import { V2_KEY, validateUniverse } from "./schema";
+import { createRng } from "./sim/rng";
 
 export const SAVE_DELAY_MS = 300;
 
@@ -87,6 +89,11 @@ function updateWrestler(universe, id, change) {
   };
 }
 
+// Faction rule violations leave the universe unchanged (same reference).
+function keepIfOk(universe, result) {
+  return result.ok ? result.universe : universe;
+}
+
 function applyAction(universe, action) {
   switch (action.type) {
     case "addWrestler": {
@@ -153,6 +160,33 @@ function applyAction(universe, action) {
       return Number.isInteger(action.week) && action.week >= 1
         ? { ...universe, week: action.week }
         : universe;
+
+    case "formFaction":
+      // The name comes from the seeded rng, so the action must carry a numeric seed.
+      return Number.isFinite(action.seed)
+        ? keepIfOk(
+            universe,
+            formFaction(
+              universe,
+              action.memberIds,
+              action.eventId,
+              createRng(action.seed),
+              action.name
+            )
+          )
+        : universe;
+
+    case "dissolveFaction":
+      return keepIfOk(
+        universe,
+        dissolveFaction(universe, action.factionId, action.eventId)
+      );
+
+    case "renameFaction":
+      return keepIfOk(
+        universe,
+        renameFaction(universe, action.factionId, action.name)
+      );
 
     default:
       return universe;

@@ -57,3 +57,31 @@ None required. Optional AI description hook only (template text default; no back
 | Vitest setup adds deps and config to a lint/build-only pipeline | Low | Low | Config in `vite.config.js`; `npm test` added; CI deploy workflow unaffected |
 | `crypto.randomUUID` unavailable on insecure origin | Low | Med | GitHub Pages/localhost are secure contexts; tests run in Node ≥19 |
 | StrictMode double init | Low | Low | Migration idempotent |
+
+## FT-107 — Relationship model and profiles (US-118, US-119)
+
+**Modules**: `universe/relationships.js` (pure: `stateOf`, `applyDelta`, `getRelationship`, `listFor`, `nameOf`, `RelationshipError`, threshold constants) + test; `components/universe/RelationshipProfile.jsx`, `WrestlerPicker.jsx` + RTL test. Schema gains optional `formerWrestlers {id:name}` (no version bump); `validateUniverse` enforces score range, no self-pairs, state consistent with score. Reducer gets `applyRelationshipDelta`; `removeWrestler` records a tombstone name when the wrestler has relationships and never deletes relationships.
+
+**Data**: Relationship `{fromId,toId,score,state,history[]}` unique per ordered pair; HistoryEntry `{id,eventId?,matchId?,week,delta,scoreAfter,participantIds,reason}`. Thresholds: enemy ≤ −60, rival ≤ −20, ally ≥ 20, else neutral. History `delta` is the requested delta, `scoreAfter` the clamped result.
+
+**Decisions**
+| Decision | Reason | Alternatives |
+|---|---|---|
+| Path `universe/` and constants in `relationships.js` (not `src/…`, no `config.js`) | Repo has no `src/`; avoids a new config file | Follow story text literally |
+| `formerWrestlers` name map for removed wrestlers | Keeps history readable without changing wrestler lists in all views | `former` flag on wrestler (touches every view); name snapshot on each relationship (breaks rename) |
+| Pure functions return a new universe, throw `RelationshipError` | Easy to test, reducer-friendly | Mutating reducer-only logic |
+| Profile shows outgoing relationships (X→other) | Directed model; matches “how X feels” | Merge both directions (hides asymmetry) |
+
+**Risks**: removal action must write the tombstone before dropping the wrestler (test covers); UNIVERSE shell dependency may land later (mount point only, no competing shell).
+
+## FT-108 Factions and storylines (US-120, US-121)
+
+**Modules:** `universe/factions.js` (`canForm`, `formFaction`, `avgInternalScore`, `dissolutionCandidates`, `dissolveFaction`, `renameFaction`, `generateName`) and `universe/storylines.js` (`attachEvent`, `evaluateStatuses`). Pure state-in/state-out functions, called from the `UniverseContext` reducer; tests co-located (`*.test.js`). Paths use root `universe/` (no `src/`).
+
+**Data model additions (optional fields, schemaVersion stays 2):** Faction `+formedWeek, dissolvedWeek?, dissolvedEventId?`; Storyline `+openedWeek, lastWeek, resolvedWeek?`, status `open|resolved|abandoned`. Dissolved factions are retained. Reducer actions `formFaction`, `dissolveFaction`, `renameFaction`.
+
+**Rules:** faction 2–5 members, one active faction per wrestler, formation needs both-direction score ≥ 20 for all pairs, dissolution candidate when average internal score < 0 (never auto-dissolved; the player accepts a proposed event). Storyline opens on an accepted rival-type event, appends for the same open pair, resolves on respect/alliance, abandons after 8 weeks without events; proposed/rejected events never attach. Factions and storylines never change title or champion state.
+
+**Decisions:** name word list = exported constants in `factions.js` (no settings UI; · simplest, "configurable" by editing; alt: settings field). Event type sets `RIVAL_TYPES`/`RESOLVE_TYPES` are constants to be aligned with the engine's event catalogue (assumption, open dependency). Randomness only via injected seeded rng.
+
+**Risk:** event type names not fixed yet (Med/Low) → single constants, one place to change.

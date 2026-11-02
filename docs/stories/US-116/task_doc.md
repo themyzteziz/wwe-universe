@@ -1,48 +1,63 @@
 # US-116: Upgrade to React 19 and set up Vitest + React Testing Library
-**Type:** story · **Category:** devops · **Points:** 3
+**Status:** Ready for UAT · **Category:** devops · **Points:** 3 · **Sprint:** —
 
 ## Summary
-React 19 was already pinned. This story pins Vite and the React plugin, adds Vitest + jsdom + React Testing Library, replaces the broken Next.js ESLint config with a Vite/React flat config, and adds a `check` script (lint + tests + build).
-
-## Compatibility
-Versions for react, react-dom, vite and @vitejs/plugin-react are the ones resolved in `package-lock.json` before this story. The others are ranges installed by `npm install`; the exact resolved versions are in the regenerated `package-lock.json`.
-
-| Dependency | Version | Result |
-|---|---|---|
-| react | 19.2.4 | OK (already pinned) |
-| react-dom | 19.2.4 | OK (peer `react ^19.2.4`) |
-| vite | 8.1.5 (pinned, was `latest`) | OK. Needs Node `^20.19.0 \|\| >=22.12.0`; CI uses Node 22 |
-| @vitejs/plugin-react | 6.0.3 (pinned, was `latest`) | OK (peer `vite ^8.0.0`) |
-| eslint | ^9 (lock: 9.x) | OK |
-| @eslint/js | ^9.39.5 | OK (already in the lock as an eslint dependency, now explicit) |
-| eslint-plugin-react-hooks | ^7.0.1 | OK, only `rules-of-hooks` and `exhaustive-deps` enabled |
-| eslint-plugin-react-refresh | ^0.4.24 | OK, `only-export-components` as warning |
-| globals | ^16.0.0 | OK |
-| eslint-config-next | not installed | Replaced by the Vite/React flat config (`eslint.config.mjs`) |
-| vitest | ^4.1.0 | OK, major whose peer range includes Vite 8 |
-| jsdom | ^27.0.0 | OK |
-| @testing-library/react | ^16.3.0 | OK with React 19 |
-| @testing-library/dom | ^10.4.1 | OK (peer of RTL 16) |
-| @testing-library/jest-dom | ^6.9.1 | OK, via `@testing-library/jest-dom/vitest` |
-| @testing-library/user-event | ^14.6.1 | OK |
-
-Node in `.github/workflows/deploy.yml` stays at 22, which satisfies Vite 8 and Vitest.
+The project now runs on React 19 with Vite, and has a working test runner (Vitest with jsdom and React Testing Library). Lint is fixed with a Vite/React flat ESLint config, and the team checks command (`npm run check`) now includes the test run. The app itself behaves as before for users.
 
 ## What was built
-- `package.json`: pinned `vite` and `@vitejs/plugin-react`, new devDependencies, scripts `test`, `test:run`, `check`.
-- `vite.config.js`: `vitest/config`, `base: "/wwe-universe/"` unchanged, jsdom test block. Legacy stubs (`src/**`, `test/**/*.ts`) are excluded, so later `test/*.test.jsx` files are collected.
-- `vitest.setup.js`: jest-dom matchers; after each test, RTL cleanup and `localStorage.clear()`.
-- `App.test.jsx`: smoke tests for the BOOKING and WRESTLERS buttons and the "Match Generator" heading.
-- `eslint.config.mjs`: Vite/React flat config. It ignores `dist`, `node_modules`, `src` and `test/**/*.ts` only.
+- `package.json`: pinned `vite` and `@vitejs/plugin-react` to the resolved versions; added test and lint devDependencies; scripts `test` (watch), `test:run` (once), `check` (lint + test:run + build).
+- `vite.config.js`: `defineConfig` from `vitest/config`; jsdom test environment, `vitest.setup.js` as setup file, test include/exclude rules. `base: "/wwe-universe/"` unchanged.
+- `vitest.setup.js`: loads `@testing-library/jest-dom/vitest`; after each test runs `cleanup()` and clears `localStorage`.
+- `App.test.jsx`: smoke test for `<App />`.
+- `eslint.config.mjs`: replaces the Next.js config with a Vite/React flat config.
+- `package-lock.json`: regenerated.
+
+## Compatibility
+Exact versions are recorded in `package-lock.json`, which is authoritative (accepted by the product owner). Semver ranges are listed for the packages that are not pinned.
+
+| Dependency | Resolved version | Result |
+|---|---|---|
+| react | 19.2.4 | OK (already on 19) |
+| react-dom | 19.2.4 | OK (already on 19) |
+| vite | 8.1.5 (pinned) | OK |
+| @vitejs/plugin-react | 6.0.3 (pinned) | OK |
+| vitest | ^4.1.0 | OK, major matches the pinned Vite peer range |
+| jsdom | ^27.0.0 | OK |
+| @testing-library/react | per lockfile | OK |
+| @testing-library/dom | per lockfile | OK |
+| @testing-library/jest-dom | per lockfile | OK |
+| @testing-library/user-event | per lockfile | OK |
+| eslint | per lockfile | OK |
+| @eslint/js | per lockfile | OK |
+| eslint-plugin-react-hooks | per lockfile | OK |
+| eslint-plugin-react-refresh | per lockfile | OK |
+| globals | per lockfile | OK |
+| eslint-config-next | not installed | Replaced: the old config could not load and was removed |
+
+## How it works
+- **AC 1, compatibility:** this table documents each dependency. Exact versions are in the lockfile.
+- **AC 2, React 19:** `react` and `react-dom` resolve to one version each (19.2.4). BOOKING and WRESTLERS behave as before.
+- **AC 3, test runner:** `npm test` starts Vitest in watch mode; `npm run test:run` runs once. The smoke test renders `<App />`, checks the BOOKING and WRESTLERS nav buttons and the "Match Generator" heading, and checks that clicking WRESTLERS replaces the BOOKING content. Legacy `.ts` stubs under `src/` and `test/` are not collected.
+- **AC 4, lint:** `npm run lint --silent` runs the flat config. Only generated and legacy-stub paths are ignored.
+- **AC 5, build:** `npm run build --silent` succeeds. `dist/index.html` still references `/wwe-universe/assets/`.
+- **AC 6, checks:** `npm run check` runs lint, tests and build. From this story on, the project checks include the test run.
 
 ## How to test
-- `npm install`, then `npm run check`.
-- `npm ls react react-dom` shows 19.2.4 for each.
-- `npm run test:run` runs the smoke tests once. `npm test` runs Vitest in watch mode.
-- Manual: `npm run dev`, generate and reroll a match, change wins, status and champion, and add and edit a wrestler.
+**Unit tests:** `npm run test:run` (once) or `npm test` (watch). Full gate: `npm run check`.
+
+- **AC 1 Verify:** this document has the Compatibility table with a result for each dependency.
+- **AC 2 Verify:** `npm ls react react-dom` shows 19.2.4 once each. `npm run dev` renders the app. Generate and reroll a match, change wins, status and champion, and add and edit a wrestler as before.
+- **AC 3 Verify:** `npm run test:run` collects `App.test.jsx` and passes. No `src/**` or `test/**/*.ts` stub is collected.
+- **AC 4 Verify:** `npm run lint --silent` exits 0.
+- **AC 5 Verify:** `npm run build --silent` exits 0. `vite.config.js` has `base: "/wwe-universe/"`. `dist/index.html` references `/wwe-universe/assets/`.
+- **AC 6 Verify:** `npm run check` exits 0.
 
 ## Deployment notes
-`package-lock.json` must be regenerated with `npm install` and committed.
+- **Pre-deploy:** run `npm install` and commit the regenerated `package-lock.json`. Use `npm ci` in CI so the lockfile versions are used.
+- **Node version:** the version in `.github/workflows/deploy.yml` was checked against the pinned Vite and Vitest engines. No bump was required.
+- **Configuration:** none. No secrets are used. Test setup clears `localStorage` only inside jsdom.
 
 ## Known limitations
-- Legacy stub files under `src/` and `test/` are only excluded, not removed (separate cleanup).
+- Migration to TypeScript is out of scope.
+- The manual dev-server check (AC 2) and `npm ls` were verified statically in QA. A manual run of `npm run dev` is still recommended before release.
+- Removing the generated `src/**/*.ts` and `test/**/*.ts` stubs is a separate cleanup.

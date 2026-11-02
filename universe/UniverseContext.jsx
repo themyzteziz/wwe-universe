@@ -8,6 +8,7 @@ import {
   useRef,
 } from "react";
 import { validateSettings } from "./constants";
+import { recordResult, undoLastResult } from "./matchResults";
 import { ensureCurrent } from "./migrate";
 import { applyDelta, RelationshipError } from "./relationships";
 import { V2_KEY, validateUniverse } from "./schema";
@@ -166,6 +167,13 @@ function applyAction(universe, action) {
       return Number.isInteger(action.week) && action.week >= 1
         ? { ...universe, week: action.week }
         : universe;
+
+    // `result` is nested because a match `type` would clash with the action `type`.
+    case "recordResult":
+      return recordResult(universe, action.result ?? {});
+
+    case "undoLastResult":
+      return undoLastResult(universe);
 
     default:
       return universe;

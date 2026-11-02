@@ -11,3 +11,11 @@
 ## US-103 Wrestlers develop believable histories
 - `src/products/wrestlers-develop-believable.service.ts`
 - `test/products/wrestlers-develop-believable.test.ts`
+
+## US-107 Player plays matches in WWE 2K26 and manually enters results
+- `src/bookings/player-plays-matches.service.ts`
+- `test/bookings/player-plays-matches.test.ts`
+
+## US-111 Events are influenced by wrestler history
+- `src/bookings/events-influenced-wrestler.service.ts`
+- `test/bookings/events-influenced-wrestler.test.ts`

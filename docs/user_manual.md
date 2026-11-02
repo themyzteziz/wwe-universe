@@ -23,3 +23,14 @@ You can surprise to emerge from simulation rules and prior events, not from rand
 
 - AC 1: Surprise emerges from simulation rules
 - AC 2: Invalid input is rejected
+
+## Wrestlers develop believable histories
+You can wrestlers to develop believable histories, alliances, rivalries and unexpected interactions, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: Wrestlers develop believable histories
+- AC 2: Invalid input is rejected

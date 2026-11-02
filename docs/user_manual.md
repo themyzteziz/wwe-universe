@@ -2,9 +2,7 @@
 
 ## Table of contents
 
-1. Event types and rarity
-2. How to save and reload your universe
-3. Upgrading from the previous version
+No end-user change in this story. The table of contents is unchanged.
 
 ## Event types and rarity
 

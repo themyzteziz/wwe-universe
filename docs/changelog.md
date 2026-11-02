@@ -2,7 +2,7 @@
 
 ## Changelog
 
-- 2026-11-02 — US-132 Universe timeline view: chronological read-only timeline with order toggle, week/wrestler/event-type filters, dimmed rejected events and 50-per-page paging.
+- 2026-11-02 — US-138 CI: run tests and verify GitHub Pages deployment compatibility: the Pages build job now runs lint and tests before build; deploy unchanged.
 
 - 2026-11-02 — US-118 Relationship model: scale, states and explainable history
 - 2026-11-02 — US-131 UNIVERSE view navigation shell

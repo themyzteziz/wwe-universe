@@ -43,3 +43,11 @@
 ## US-125 These can be explored later, but never block the first working simulation
 - `src/bookings/these-can-be.service.ts`
 - `test/bookings/these-can-be.test.ts`
+
+## US-128 Relationships evolve naturally based on match results
+- `src/bookings/relationships-evolve-naturally.service.ts`
+- `test/bookings/relationships-evolve-naturally.test.ts`
+
+## US-129 **Goal:** Create a living WWE Universe where anything happen,s wrestlers develop
+- `src/bookings/goal-create-living.service.ts`
+- `test/bookings/goal-create-living.test.ts`

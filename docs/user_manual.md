@@ -123,3 +123,25 @@ You can these can be explored later, but to never block the first working simula
 - AC 1: These can be explored later
 - AC 2: Negative path
 - AC 3: Invalid input is rejected
+
+## Relationships evolve naturally based on match results
+You can relationships to evolve naturally based on match results, previous events, and interactions, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: Relationships evolve naturally based on match
+- AC 2: Invalid input is rejected
+
+## **Goal:** Create a living WWE Universe where anything happen,s wrestlers develop
+You can **Goal:** Create a living WWE Universe where anything to happen, wrestlers develop their own histories, and unexpected storylines emerge organically over time, so that the work gets done faster and with fewer mistakes.
+
+**Steps**
+1. Open the app.
+2. Work as usual — the behaviour described below is available.
+3. Check the result described below.
+
+- AC 1: **Goal:** Create a living WWE Universe where
+- AC 2: Invalid input is rejected

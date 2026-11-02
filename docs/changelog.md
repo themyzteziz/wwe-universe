@@ -1,5 +1,7 @@
 # Changelog
 
+- 2026-11-02 — US-129 **Goal:** Create a living WWE Universe where anything happen,s wrestlers develop
+- 2026-11-02 — US-128 Relationships evolve naturally based on match results
 - 2026-11-02 — US-125 These can be explored later, but never block the first working simulation
 - 2026-11-02 — US-122 M3 - Events: the player generate,s accept/reject
 - 2026-11-02 — US-121 M2 - Relationships: relationship changes are viewed

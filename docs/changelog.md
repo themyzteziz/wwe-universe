@@ -1,5 +1,6 @@
 # Changelog
 
+- 2026-11-02 — US-122 M3 - Events: the player generate,s accept/reject
 - 2026-11-02 — US-121 M2 - Relationships: relationship changes are viewed
 - 2026-11-02 — US-118 Avoid embedding API secrets in browser bundles or localStorage
 - 2026-11-02 — US-117 Keep the app functional without paid AI APIs

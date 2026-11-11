@@ -83,7 +83,7 @@ export default function MatchGenerator({
       title: "Normal Match",
       type: currentMatchType,
       participants,
-      playerWrestlerId: null,
+      playerWrestlerId: participants[Math.floor(Math.random() * participants.length)].id,
     });
   }
 
@@ -158,19 +158,11 @@ export default function MatchGenerator({
                   >
                     {wrestler.name}
 
-                    <button
-                      type="button"
+                    <span
                       className={`player-select-button${generatedMatch.playerWrestlerId === wrestler.id ? " selected" : ""}`}
-                      aria-label={`Play as ${wrestler.name}`}
-                      aria-pressed={generatedMatch.playerWrestlerId === wrestler.id}
-                      disabled={Boolean(generatedMatch.recordedWinner)}
-                      onClick={() => setGeneratedMatch((match) => ({
-                        ...match,
-                        playerWrestlerId: match.playerWrestlerId === wrestler.id ? null : wrestler.id,
-                      }))}
                     >
                       {generatedMatch.playerWrestlerId === wrestler.id ? "PLAYER" : "CPU"}
-                    </button>
+                    </span>
 
                     {onRecord && (
                       <button

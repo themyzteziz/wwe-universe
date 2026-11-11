@@ -22,6 +22,7 @@ import {
  * @property {'1v1'|'3MAN ELI'|'4MAN ELI'} type
  * @property {string[]} participantIds
  * @property {string[]} winnerIds
+ * @property {string} [playerWrestlerId]  selected player-controlled wrestler; absent means unspecified
  * @property {string} recordedAt    ISO string
  * @property {number} [seed]
  *
@@ -196,6 +197,10 @@ export function validateUniverse(obj) {
   list("matchResults").forEach((m, i) => {
     checkIds(`Match result ${i + 1} participantIds`, m.participantIds);
     checkIds(`Match result ${i + 1} winnerIds`, m.winnerIds);
+    if (m.playerWrestlerId !== undefined &&
+        (!Array.isArray(m.participantIds) || !m.participantIds.includes(m.playerWrestlerId))) {
+      errors.push(`Match result ${i + 1} playerWrestlerId must be a participant.`);
+    }
   });
   list("factions").forEach((f, i) => checkIds(`Faction ${i + 1} memberIds`, f.memberIds));
   list("storylines").forEach((s, i) =>

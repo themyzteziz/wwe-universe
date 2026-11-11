@@ -17,14 +17,17 @@ function addWins(wrestlers, ids, amount) {
  *   participantIds: string[], winnerIds: string[]}} payload
  */
 export function recordResult(universe, payload) {
-  const { id, recordedAt, seed, week, type, participantIds, winnerIds } = payload;
+  const { id, recordedAt, seed, week, type, participantIds, winnerIds, playerWrestlerId } = payload;
   if (!Array.isArray(participantIds) || !Array.isArray(winnerIds) || winnerIds.length === 0) {
     return universe;
   }
   if (!winnerIds.every((winnerId) => participantIds.includes(winnerId))) return universe;
   if (universe.matchResults.some((m) => m.id === id)) return universe;
+  if (playerWrestlerId != null && !participantIds.includes(playerWrestlerId)) return universe;
 
-  const result = { id, week, type, participantIds, winnerIds, recordedAt, seed };
+  const result = { id, week, type, participantIds, winnerIds, recordedAt, seed,
+    ...(playerWrestlerId != null ? { playerWrestlerId } : {}),
+  };
   return {
     ...universe,
     wrestlers: addWins(universe.wrestlers, winnerIds, 1),

@@ -114,22 +114,17 @@ export default function MatchGenerator({
                 (wrestler, index) => (
                   <div
                     className="generated-wrestler"
-                    key={wrestler.name}
+                    key={wrestler.id ?? wrestler.name}
                   >
-                    {wrestler.name}
+                    <span className="generated-wrestler-name">{wrestler.name}</span>
                     <span
                       className={`player-select-button${generatedMatch.playerName === wrestler.name ? " selected" : ""}`}
                     >
                       {generatedMatch.playerName === wrestler.name ? "PLAYER" : "CPU"}
                     </span>
 
-                    {index <
-                      generatedMatch.participants.length -
-                        1 && (
-                      <span className="versus">
-                        {" "}
-                        VS{" "}
-                      </span>
+                    {index < generatedMatch.participants.length - 1 && (
+                      <span className="versus" aria-hidden="true">VS</span>
                     )}
                   </div>
                 )

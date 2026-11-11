@@ -58,6 +58,17 @@ describe("MatchGenerator result recording", () => {
     expect(screen.getByRole("button", { name: "Mark BRAVO as winner" })).toBeDisabled();
   });
 
+  it("selects PLAYER separately from the winner and records the selected wrestler", async () => {
+    const spy = vi.fn();
+    render(<Harness initial={startUniverse()} spy={spy} />);
+    await userEvent.click(screen.getByRole("button", { name: "Generate Match" }));
+    await userEvent.click(screen.getByRole("button", { name: "Play as ALPHA" }));
+    expect(screen.getByRole("button", { name: "Play as ALPHA" })).toHaveTextContent("PLAYER");
+    expect(screen.getByRole("button", { name: "Play as BRAVO" })).toHaveTextContent("CPU");
+    await userEvent.click(screen.getByRole("button", { name: "Mark BRAVO as winner" }));
+    expect(spy.mock.calls[0][0]).toMatchObject({ playerWrestlerId: "w_a", winnerIds: ["w_b"] });
+  });
+
   it("AC 1: rerolling clears the recorded panel and allows a new result", async () => {
     render(<Harness initial={startUniverse()} />);
 

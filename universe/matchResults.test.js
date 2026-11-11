@@ -36,6 +36,13 @@ describe("recordResult (AC 1, AC 2)", () => {
     expect(after.wrestlers.find((w) => w.id === "w_c").wins).toBe(0);
   });
 
+  it("stores the optional player wrestler and rejects non-participants", () => {
+    const saved = recordResult(universe(), payload({ playerWrestlerId: "w_a" }));
+    expect(saved.matchResults[0].playerWrestlerId).toBe("w_a");
+    const before = universe();
+    expect(recordResult(before, payload({ playerWrestlerId: "w_unknown" }))).toBe(before);
+  });
+
   it("AC 1: leaves status and champion untouched", () => {
     const after = recordResult(universe(), payload({ winnerIds: ["w_c"] }));
     expect(after.wrestlers.find((w) => w.id === "w_c")).toMatchObject({ champion: true, status: "available" });

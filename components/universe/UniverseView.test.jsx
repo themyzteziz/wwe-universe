@@ -104,4 +104,35 @@ describe("UNIVERSE view navigation shell", () => {
 
     expect(screen.queryByLabelText("pending proposals")).not.toBeInTheDocument();
   });
+
+  it("US-134: the Export panel lives in the Backup sub-tab, not on WRESTLERS", async () => {
+    renderApp();
+
+    await userEvent.click(screen.getByRole("button", { name: "WRESTLERS" }));
+    expect(screen.queryByRole("button", { name: "Export" })).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "UNIVERSE" }));
+    expect(screen.queryByRole("button", { name: "Export" })).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("tab", { name: "Backup" }));
+    expect(screen.getByRole("button", { name: "Export" })).toBeInTheDocument();
+  });
+
+  it("US-134: a failed export shows its banner while the Backup tab is open", async () => {
+    const original = URL.createObjectURL;
+    URL.createObjectURL = vi.fn(() => {
+      throw new Error("no blobs");
+    });
+
+    try {
+      renderApp();
+      await userEvent.click(screen.getByRole("button", { name: "UNIVERSE" }));
+      await userEvent.click(screen.getByRole("tab", { name: "Backup" }));
+      await userEvent.click(screen.getByRole("button", { name: "Export" }));
+
+      expect(screen.getByRole("alert")).toHaveTextContent("Export failed – try again");
+    } finally {
+      URL.createObjectURL = original;
+    }
+  });
 });
